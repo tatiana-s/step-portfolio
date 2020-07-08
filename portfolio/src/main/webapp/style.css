@@ -14,6 +14,8 @@ img {
 } 
 
 body {
+    background-color: rgb(25, 56, 76);
+    color: white;
     font-family: 'Assistant';
     font-size: 22px;
 }
