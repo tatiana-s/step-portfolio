@@ -12,3 +12,8 @@ img {
     max-width:75%; 
     height:auto; 
 } 
+
+body {
+    font-family: 'Assistant';
+    font-size: 22px;
+}
