@@ -1,30 +1,44 @@
-#header {
-    margin-left: 50px;
-    margin-right: auto;
-    width: 650px;
+.sections {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    grid-template-rows: auto;
+    grid-template-areas: 
+        "image1 content1"
+        "image2 content2";
 }
 
-#content {
-    margin-left: 50px;
-    margin-right: auto;
+#image1 {
+    grid-area: image1;
     margin-bottom: 50px;
-    width: 650px;
 }
 
-.sectionImage {
-    float: left;
+#content1 {
+    grid-area: content1;
 }
 
-.sectionHeader {
-    float: right;
+#image2 {
+    grid-area: image2;
+    margin-bottom: 50px;
+}
+
+#content2 {
+    grid-area: content2;
+}
+
+a {
+    color: yellowgreen;
 }
 
 img { 
-    max-width:75%; 
+    max-width:95%; 
     height:auto; 
+    box-shadow: 0px 3px 15px rgba(0,0,0,0.5);
 } 
 
 body {
+    margin-left: 50px;
+    margin-right: auto;
+    width: 1000px;
     background-color: rgb(25, 56, 76);
     color: white;
     font-family: 'Assistant';
