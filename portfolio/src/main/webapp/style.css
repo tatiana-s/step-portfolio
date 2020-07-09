@@ -44,3 +44,27 @@ body {
     font-family: 'Assistant';
     font-size: 22px;
 }
+
+#typewriter {
+    display: inline-block;
+}
+
+#title {
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 4px solid yellowgreen;
+    box-sizing: border-box;
+    animation: animated-title 3s steps(20, end),
+             animated-cursor .75s step-end infinite;
+}
+
+@keyframes animated-title {
+  from{width: 0%;}
+  to{width: 100%;}
+}
+
+@keyframes animated-cursor{
+  from, to {border-right-color: transparent;}
+  50% {border-right-color: yellowgreen;}
+}
