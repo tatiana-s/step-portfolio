@@ -88,11 +88,17 @@ body {
   box-sizing: border-box;
   height: auto;
   max-width: 500px;
+  margin-top: 25px;
   position: relative;
+
 }
 
 .slide {
   display: none;
+}
+
+#back {
+    font-size: 14px;
 }
 
 /* slideshow: arrows for previous and next image */
