@@ -42,3 +42,12 @@ function showSlides(newIndex) {
   slides[slideIndex].style.display = "block";
   dots[slideIndex].className += " active";
 }
+
+/**
+ * Displays text returned by server.
+ */
+ function showServerText() {
+   fetch('/comments').then(response => response.text()).then((text) => {
+    document.getElementById('text-container').innerText = text;
+  });
+ }
