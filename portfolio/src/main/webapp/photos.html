@@ -4,17 +4,38 @@
     <meta charset="UTF-8">
     <title>Photo Gallery</title>
     <link rel="stylesheet" href="style.css">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Assistant'>
+    <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="showSlides(0)">
     <div id="photos">
-      <div class="photos-content">
-        <img src="/images/vert1.jpg" id="photo1"/>
-        <img src="/images/vert2.jpg" id="photo2"/>
-        <img src="/images/vert3.jpg" id="photo3"/>
-        <img src="/images/vert4.jpg" id="photo4"/>
-        <img src="/images/hor1.jpg" id="photo5"/>
-        <img src="/images/hor2.jpg" id="photo6"/>
+      <h1>Photo Gallery</h1>
+      <a id="back" href="index.html">Go back to main page</a>
+      <div class="slideshow">
+        <!-- images -->
+        <div class="slide">
+          <img src="/images/vert1.jpg" id="photo1" alt="View from Castle Hill in Cambridge."/>
         </div>
+        <div class="slide">
+          <img src="/images/vert2.jpg" id="photo2" alt="Walnut Court View in Queens' College."/>
+        </div>
+        <div class="slide">
+          <img src="/images/vert3.jpg" id="photo3" alt="My cat."/>
+        </div>
+        <div class="slide">
+          <img src="/images/vert4.jpg" id="photo4" alt="Random field near my home."/>
+        </div>
+        <!-- navigation arrows -->
+        <a class="prev" onclick="changeSlides(-1)">&#10094;</a>
+        <a class="next" onclick="changeSlides(1)">&#10095;</a>
+        <!-- indicator dots -->
+        <div id="dots">
+          <span class="dot" onclick="showSlides(0)"></span>
+          <span class="dot" onclick="showSlides(1)"></span>
+          <span class="dot" onclick="showSlides(2)"></span>
+          <span class="dot" onclick="showSlides(3)"></span>
+      </div>
+    </div>
     </div>
   </body>
 </html>

@@ -4,9 +4,10 @@ a {
 }
 
 img { 
+  align-content: center;
   box-shadow: 0px 3px 15px rgba(0,0,0,0.5);
   height:auto; 
-  max-width:95%; 
+  max-width:100%; 
 } 
 
 body {
@@ -36,6 +37,7 @@ body {
 
 #content1 {
   grid-area: content1;
+  margin: 25px;
 }
 
 #image2 {
@@ -45,6 +47,7 @@ body {
 
 #content2 {
   grid-area: content2;
+  margin: 25px;
 }
 
 /* title with animation */
@@ -80,48 +83,89 @@ body {
   }
 }
 
-/* grid for photo gallery */
-.photos-content {
-  display: grid;
-  grid-template-columns: 33% 33% 33%;
-  grid-template-rows: auto;
-  grid-template-areas: 
-    "photo1 photo2 photo3"
-    "photo4 photo5 photo6"
+/* photo slideshow */
+.slideshow {
+  box-sizing: border-box;
+  height: auto;
+  max-width: 500px;
+  margin-top: 25px;
+  position: relative;
 }
 
-#photo1 {
-  align-self: center;
-  grid-area: photo1;
-  margin: 25px;
+.slide {
+  display: none;
 }
 
-#photo2 {
-  align-self: center;
-  grid-area: photo2;
-  margin: 25px;
+#back {
+    font-size: 14px;
 }
 
-#photo3 {
-  align-self: center;
-  grid-area: photo3;
-  margin: 25px;
+/* slideshow: arrows for previous and next image */
+.prev, .next {
+  border-radius: 0 5px 5px 0;
+  color: yellowgreen;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: -20px;
+  padding: 15px;
+  position: absolute;
+  transition: 0.6s ease;
+  top: 50%;
+  user-select: none;
+  width: auto;
 }
 
-#photo4 {
-  align-self: center;
-  grid-area: photo4;
-  margin: 25px;
+.next {
+  right: 0;
+  border-radius: 5px 0 0 5px;
 }
 
-#photo5 {
-  align-self: center;
-  grid-area: photo5;
-  margin: 25px;
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
 }
 
-#photo6 {
-  align-self: center;
-  grid-area: photo6;
-  margin: 25px;
+/* slideshow: position indicator dots including animation on hover and when active */
+#dots {
+  text-align:center;
+}
+
+.dot {
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  display: inline-block;
+  height: 20px;
+  margin: 0 2px;
+  transition: background-color 0.6s ease;
+  width: 20px;
+}
+
+.active, .dot:hover {
+  background-color: #717171;
+}
+
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {
+    opacity: .4;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade {
+  from {
+    opacity: .4;
+  }
+  to {
+    opacity: 1;
+  }
 }

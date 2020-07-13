@@ -11,3 +11,34 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+let slideIndex = 0;
+
+/**
+ * Helper function for naviagtion via arrows.
+ */
+function changeSlides(offset) {
+  showSlides(slideIndex + offset);
+}
+
+/**
+ * Displays photo at new index by changing its display style and setting the corresponding indicator.
+ */
+function showSlides(newIndex) {
+  let slides = document.getElementsByClassName("slide");
+  let dots = document.getElementsByClassName("dot");
+  // hide previous photo and indicator
+  slides[slideIndex].style.display = "none";
+  dots[slideIndex].className = dots[slideIndex].className.replace("active", "");
+  // handle edge cases and set new slide index
+  if (newIndex > slides.length - 1) {
+    slideIndex = 0;
+  } else if (newIndex < 0) {
+    slideIndex = slides.length - 1;
+  } else {
+    slideIndex = newIndex;
+  }
+  // display photo
+  slides[slideIndex].style.display = "block";
+  dots[slideIndex].className += " active";
+}
