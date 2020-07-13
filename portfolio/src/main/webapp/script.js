@@ -17,13 +17,12 @@ let slideIndex = 0;
 /**
  * Helper function for naviagtion via arrows.
  */
-function changeSlides(n) {
-  let newIndex = slideIndex + n;
-  showSlides(newIndex);
+function changeSlides(offset) {
+  showSlides(slideIndex + offset);
 }
 
 /**
- * Displays photo at index n by changing its display style and setting the corresponding indicator.
+ * Displays photo at new index by changing its display style and setting the corresponding indicator.
  */
 function showSlides(newIndex) {
   let slides = document.getElementsByClassName("slide");
