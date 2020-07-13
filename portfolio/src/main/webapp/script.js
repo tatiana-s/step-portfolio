@@ -15,38 +15,29 @@
 let slideIndex = 0;
 
 /**
- * Helper functions for naviagtion via arrows and indicator dots.
+ * Helper function for naviagtion via arrows.
  */
 function changeSlides(n) {
-  showSlides(slideIndex += n);
-}
-
-function currentSlide(n) {
-  showSlides(slideIndex = n);
+  let newIndex = slideIndex + n;
+  showSlides(newIndex);
 }
 
 /**
  * Displays photo at index n by changing its display style and setting the corresponding indicator.
  */
-function showSlides(n) {
+function showSlides(newIndex) {
   let slides = document.getElementsByClassName("slide");
   let dots = document.getElementsByClassName("dot");
-  // handle edge cases
-  if (n > slides.length - 1) {
+  // hide previous photo and indicator
+  slides[slideIndex].style.display = "none";
+  dots[slideIndex].className = dots[slideIndex].className.replace("active", "");
+  // handle edge cases and set new slide index
+  if (newIndex > slides.length - 1) {
     slideIndex = 0;
-  } else if (n < 0) {
+  } else if (newIndex < 0) {
     slideIndex = slides.length - 1;
   } else {
-    slideIndex = n;
-  }
-  let i;
-  // hide all photos
-  for (i = 0; i < slides.length; i++) {
-      slides[i].style.display = "none";
-  }
-  // deactivate all indicators
-  for (i = 0; i < dots.length; i++) {
-      dots[i].className = dots[i].className.replace("active", "");
+    slideIndex = newIndex;
   }
   // display photo
   slides[slideIndex].style.display = "block";
