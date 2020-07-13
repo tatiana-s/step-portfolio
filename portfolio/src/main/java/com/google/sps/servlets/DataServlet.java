@@ -16,6 +16,7 @@ package com.google.sps.servlets;
 
 import com.google.gson.Gson;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.annotation.WebServlet;
@@ -23,33 +24,26 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet for handeling comments data */
+/** Servlet for handling comments data */
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private List<String> testComments;
-
-  @Override
-  public void init() {
-    testComments = new ArrayList<>();
-    testComments.add("This is an example comment.");
-    testComments.add("Another example comment...");
-    testComments.add("Wow! Yet another example comment?");
-  }
+  private final List<String> testComments = new ArrayList<String>(Arrays.asList( 
+    "This is an example comment.",
+    "Another example comment...",
+    "Wow! Yet another example comment?"));
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String json = convertToJson(testComments);
     response.setContentType("application/json;");
-    response.getWriter().println(json);
+    response.getWriter().println(convertToJson(testComments));
   }
 
   /**
    * Converts a list of strings into a JSON string using the Gson library.
    */
-  private String convertToJson(List<String> commentList) {
+  private static String convertToJson(List<String> commentList) {
     Gson gson = new Gson();
-    String json = gson.toJson(commentList);
-    return json;
+    return gson.toJson(commentList);
   }
 }
