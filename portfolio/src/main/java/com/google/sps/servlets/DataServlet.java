@@ -33,33 +33,48 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
+  /* Datastore data is represented by entities which have a kind and certain properties,
+   * and the constants below define the kind and property names for comment entities.
+   * Changing them would mean comments saved with a previous definition would not be displayed anymore. */
+  private static final String COMMENT_KIND = "Comment";
+  private static final String CONTENT_PROPERTY = "content";
+
+  /* This is the name of the input form which is defined in the html of the main page */
+  private static final String INPUT_FORM = "comment-input";
+
+  /* This specifies what URL the client is redirected to after a POST request. */
+  private static final String REDIRECT_URL = "/index.html";
+
+  /**
+   * Loads and returns comments from the datastore database.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // load comments from database
-    Query query = new Query("Comment");
+    Query query = new Query(COMMENT_KIND);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-    // return list of results
     List<String> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
-      String content = (String) entity.getProperty("content");
-      comments.add(content);
+      Object content = entity.getProperty(CONTENT_PROPERTY);
+      if(content instanceof String) {
+        comments.add((String) content);
+      }
     }
     response.setContentType("application/json;");
     response.getWriter().println(convertToJson(comments));
   }
 
+  /**
+   * Saves comments entered in the comment form in the datastore database. 
+   */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // retrieve input
-    String comment = request.getParameter("comment-input");
-    // save in database
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("content", comment);
+    String comment = request.getParameter(INPUT_FORM);
+    Entity commentEntity = new Entity(COMMENT_KIND);
+    commentEntity.setProperty(CONTENT_PROPERTY, comment);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
-    // redirect back to main page
-    response.sendRedirect("/index.html");
+    response.sendRedirect(REDIRECT_URL);
   }
 
   /**
