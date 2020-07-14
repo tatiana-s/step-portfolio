@@ -63,3 +63,9 @@ function createCommentElement(text) {
   element.className = "comment";
   return element;
 }
+
+function deleteComments() {
+  fetch('/delete-comments', {
+    method: 'POST'
+  }).then(showComments());
+}

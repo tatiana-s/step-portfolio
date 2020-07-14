@@ -31,13 +31,29 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet for deleting comments */
 @WebServlet("/delete-comments")
-public class CommentServlet extends HttpServlet {
+public class DeleteCommentServlet extends HttpServlet {
+
+  /* Datastore data is represented by entities which have a kind and certain properties,
+   * and the constants below define the kind and property names for comment entities.
+   * Changing them would mean comments saved with a previous definition would not be displayed anymore. */
+  private static final String COMMENT_KIND = "Comment";
+  private static final String CONTENT_PROPERTY = "content";
+
+  /* This specifies what URL the client is redirected to after a POST request. */
+  private static final String REDIRECT_URL = "/index.html";
 
   /**
    * Deletes all comments in the datastore database. 
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+    Query query = new Query(COMMENT_KIND);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    List<String> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      datastore.delete(entity.getKey());
+    }
+    response.sendRedirect(REDIRECT_URL);
   }
 }
