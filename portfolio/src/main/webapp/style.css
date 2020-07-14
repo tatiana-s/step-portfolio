@@ -50,6 +50,34 @@ body {
   margin: 25px;
 }
 
+/* comments section */
+textarea {
+  height: 100px;
+  width: 50%;
+}
+
+input[type=submit] {
+  background-color: yellowgreen;
+  border: none;
+  color: white;
+  padding: 10px 30px;
+  text-align: center;
+}
+
+#comment-form {
+  margin-bottom: 25px;
+}
+
+#text-container {
+  margin-bottom: 25px;
+}
+
+.comment {
+  border-bottom: 1px solid white;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
 /* title with animation */
 #typewriter {
   display: inline-block;

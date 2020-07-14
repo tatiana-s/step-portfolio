@@ -27,10 +27,10 @@ function changeSlides(offset) {
 function showSlides(newIndex) {
   let slides = document.getElementsByClassName("slide");
   let dots = document.getElementsByClassName("dot");
-  // hide previous photo and indicator
+  // Hide the previous photo and indicator.
   slides[slideIndex].style.display = "none";
   dots[slideIndex].className = dots[slideIndex].className.replace("active", "");
-  // handle edge cases and set new slide index
+  // Handle edge cases and set the new slide index.
   if (newIndex > slides.length - 1) {
     slideIndex = 0;
   } else if (newIndex < 0) {
@@ -38,7 +38,7 @@ function showSlides(newIndex) {
   } else {
     slideIndex = newIndex;
   }
-  // display photo
+  // Display the photo.
   slides[slideIndex].style.display = "block";
   dots[slideIndex].className += " active";
 }
@@ -46,18 +46,18 @@ function showSlides(newIndex) {
 /** Displays list of comments returned by the server.*/
 function showComments() {
   fetch('/comments').then(response => response.json()).then(comments => {
-    const commentsElement = document.getElementById('text-container');
-    commentsElement.innerHTML = '';
+    const commentsList = document.getElementById('text-container');
+    commentsList.innerHTML = '';
     for(let i = 0; i < comments.length; i++) {
-      commentsElement.appendChild(
-      createListElement(comments[i]));
+      commentsList.appendChild(createCommentElement(comments[i]));
     }
   });
 }
 
-/** Creates an <li> element containing text. */
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
+/** Creates an <p> comment element containing text. */
+function createCommentElement(text) {
+  const element = document.createElement('p');
+  element.innerText = text;
+  element.className = "comment";
+  return element;
 }

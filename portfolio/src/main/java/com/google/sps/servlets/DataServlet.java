@@ -14,6 +14,11 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,15 +33,48 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private final List<String> testComments = new ArrayList<String>(Arrays.asList( 
-    "This is an example comment.",
-    "Another example comment...",
-    "Wow! Yet another example comment?"));
+  /* Datastore data is represented by entities which have a kind and certain properties,
+   * and the constants below define the kind and property names for comment entities.
+   * Changing them would mean comments saved with a previous definition would not be displayed anymore. */
+  private static final String COMMENT_KIND = "Comment";
+  private static final String CONTENT_PROPERTY = "content";
 
+  /* This is the name of the input form which is defined in the html of the main page */
+  private static final String INPUT_FORM = "comment-input";
+
+  /* This specifies what URL the client is redirected to after a POST request. */
+  private static final String REDIRECT_URL = "/index.html";
+
+  /**
+   * Loads and returns comments from the datastore database.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    Query query = new Query(COMMENT_KIND);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+    List<String> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      Object content = entity.getProperty(CONTENT_PROPERTY);
+      if(content instanceof String) {
+        comments.add((String) content);
+      }
+    }
     response.setContentType("application/json;");
-    response.getWriter().println(convertToJson(testComments));
+    response.getWriter().println(convertToJson(comments));
+  }
+
+  /**
+   * Saves comments entered in the comment form in the datastore database. 
+   */
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter(INPUT_FORM);
+    Entity commentEntity = new Entity(COMMENT_KIND);
+    commentEntity.setProperty(CONTENT_PROPERTY, comment);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
+    response.sendRedirect(REDIRECT_URL);
   }
 
   /**
