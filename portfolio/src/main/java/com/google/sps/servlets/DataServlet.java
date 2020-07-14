@@ -45,19 +45,28 @@ public class DataServlet extends HttpServlet {
   /* This specifies what URL the client is redirected to after a POST request. */
   private static final String REDIRECT_URL = "/index.html";
 
+  /* This is the query string parameter for the number of comments to be displayed as defined in the script. */
+  private static final String COMMENT_NUMBER_PARAM = "number";
+
   /**
    * Loads and returns comments from the datastore database.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    int commentNumber = Integer.parseInt(request.getParameter(COMMENT_NUMBER_PARAM));
     Query query = new Query(COMMENT_KIND);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     List<String> comments = new ArrayList<>();
+    int count = 0;
     for (Entity entity : results.asIterable()) {
       Object content = entity.getProperty(CONTENT_PROPERTY);
       if(content instanceof String) {
         comments.add((String) content);
+      }
+      count++;
+      if (count == commentNumber) {
+        break;
       }
     }
     response.setContentType("application/json;");

@@ -45,7 +45,9 @@ function showSlides(newIndex) {
 
 /** Displays list of comments returned by the server.*/
 function showComments() {
-  fetch('/comments').then(response => response.json()).then(comments => {
+  const numberForm = document.getElementById("number");
+  const number = numberForm.value;
+  fetch('/comments?number=' + number).then(response => response.json()).then(comments => {
     const commentsList = document.getElementById('text-container');
     commentsList.innerHTML = '';
     for(let i = 0; i < comments.length; i++) {
