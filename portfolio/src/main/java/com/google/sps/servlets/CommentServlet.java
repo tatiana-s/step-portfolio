@@ -31,7 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet for handling comments data */
 @WebServlet("/comments")
-public class DataServlet extends HttpServlet {
+public class CommentServlet extends HttpServlet {
 
   /* Datastore data is represented by entities which have a kind and certain properties,
    * and the constants below define the kind and property names for comment entities.
