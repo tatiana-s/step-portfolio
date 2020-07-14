@@ -72,10 +72,23 @@ input[type=submit] {
   margin-bottom: 25px;
 }
 
+#text-container p {
+  font-size: 18px;
+}
+
 .comment {
   border-bottom: 1px solid white;
   margin-bottom: 10px;
   padding: 5px;
+}
+
+#number {
+  background-color: yellowgreen;
+  color: white;
+  border: none;
+  margin: 5px;
+  padding: 5px 20px;
+  width: 50px;
 }
 
 /* title with animation */
