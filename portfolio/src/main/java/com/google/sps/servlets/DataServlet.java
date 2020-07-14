@@ -28,15 +28,19 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class DataServlet extends HttpServlet {
 
-  private final List<String> testComments = new ArrayList<String>(Arrays.asList( 
-    "This is an example comment.",
-    "Another example comment...",
-    "Wow! Yet another example comment?"));
+  private final List<String> comments = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json;");
-    response.getWriter().println(convertToJson(testComments));
+    response.getWriter().println(convertToJson(comments));
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    String comment = request.getParameter("comment-input");
+    comments.add(comment);
+    response.sendRedirect("/index.html");
   }
 
   /**

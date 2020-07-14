@@ -49,8 +49,7 @@ function showComments() {
     const commentsElement = document.getElementById('text-container');
     commentsElement.innerHTML = '';
     for(let i = 0; i < comments.length; i++) {
-      commentsElement.appendChild(
-      createListElement(comments[i]));
+      commentsElement.appendChild(createListElement(comments[i]));
     }
   });
 }
