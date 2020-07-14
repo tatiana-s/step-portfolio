@@ -42,3 +42,22 @@ function showSlides(newIndex) {
   slides[slideIndex].style.display = "block";
   dots[slideIndex].className += " active";
 }
+
+/** Displays list of comments returned by the server.*/
+function showComments() {
+  fetch('/comments').then(response => response.json()).then(comments => {
+    const commentsElement = document.getElementById('text-container');
+    commentsElement.innerHTML = '';
+    for(let i = 0; i < comments.length; i++) {
+      commentsElement.appendChild(
+      createListElement(comments[i]));
+    }
+  });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}

@@ -5,8 +5,9 @@
     <title>Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Assistant'>
+    <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="showComments()">
     <div id="header">
       <div id="typewriter">
         <h1 id="title">Hi, I am Tatiana.</h1>
@@ -26,6 +27,10 @@
             <p> You can find some programming projects I've done (like the ray-marched Mandelbulb on the left for example) on <a href="https://github.com/tatiana-s">GitHub</a>, 
             while my art can be found on <a href="https://www.instagram.com/tatiana.victors/">Instagram</a>.</p>
         </div>
+    </div>
+    <div class="comments">
+      <h2>Comments</h2>
+      <div id="text-container"></div>
     </div>
   </body>
 </html>
