@@ -40,11 +40,11 @@
       <label for="comment-number">Maximum number of comments to display on one page: </label>
       <select name="comment-number" id="number" onchange="showComments()">
         <option value="2">2</option>
-        <option value="4">4</option>
+        <option value="4" selected>4</option>
         <option value="8">8</option>
         <option value="16">16</option>
       </select>
-      <button onclick="deleteComments()">Delete All</button>
+      <button id="delete-all" onclick="deleteComments()">Delete All</button>
     </div>
   </body>
 </html>
