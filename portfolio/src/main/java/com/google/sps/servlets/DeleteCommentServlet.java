@@ -19,8 +19,10 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.sps.data.CommentEntity;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,12 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/delete-comments")
 public class DeleteCommentServlet extends HttpServlet {
 
-  /* Datastore data is represented by entities which have a kind and certain properties,
-   * and the constants below define the kind and property names for comment entities.
-   * (See CommentServlet) */
-  private static final String COMMENT_KIND = "Comment";
-  private static final String CONTENT_PROPERTY = "content";
-
   /* This specifies what URL the client is redirected to after a POST request. */
   private static final String REDIRECT_URL = "/index.html";
 
@@ -44,7 +40,7 @@ public class DeleteCommentServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(COMMENT_KIND);
+    Query query = new Query(CommentEntity.KIND.getLabel());
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     List<String> comments = new ArrayList<>();

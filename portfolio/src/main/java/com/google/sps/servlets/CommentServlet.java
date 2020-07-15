@@ -20,8 +20,10 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
+import com.google.sps.data.CommentEntity;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,19 +33,13 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentServlet extends HttpServlet {
 
-  /* Datastore data is represented by entities which have a kind and certain properties,
-   * and the constants below define the kind and property names for comment entities.
-   * Changing them would mean comments saved with a previous definition would not be displayed anymore. */
-  private static final String COMMENT_KIND = "Comment";
-  private static final String CONTENT_PROPERTY = "content";
-
-  /* This is the name of the input form which is defined in the html of the main page */
+  /* The name of the input form which is defined in the html of the main page. */
   private static final String INPUT_FORM = "comment-input";
 
-  /* This specifies what URL the client is redirected to after a POST request. */
+  /* Specifies what URL the client is redirected to after a POST request. */
   private static final String REDIRECT_URL = "/index.html";
 
-  /* This is the query string parameter for the number of comments to be displayed as defined in the script. */
+  /* The query string parameter for the number of comments to be displayed as defined in the script. */
   private static final String COMMENT_NUMBER_PARAM = "number";
 
   /**
@@ -52,13 +48,13 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int commentNumber = Integer.parseInt(request.getParameter(COMMENT_NUMBER_PARAM));
-    Query query = new Query(COMMENT_KIND);
+    Query query = new Query(CommentEntity.KIND.getLabel());
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
     List<String> comments = new ArrayList<>();
     int count = 0;
     for (Entity entity : results.asIterable()) {
-      Object content = entity.getProperty(CONTENT_PROPERTY);
+      Object content = entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
       if(content instanceof String) {
         comments.add((String) content);
       }
@@ -77,8 +73,8 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter(INPUT_FORM);
-    Entity commentEntity = new Entity(COMMENT_KIND);
-    commentEntity.setProperty(CONTENT_PROPERTY, comment);
+    Entity commentEntity = new Entity(CommentEntity.KIND.getLabel());
+    commentEntity.setProperty(CommentEntity.CONTENT_PROPERTY.getLabel(), comment);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.put(commentEntity);
     response.sendRedirect(REDIRECT_URL);
