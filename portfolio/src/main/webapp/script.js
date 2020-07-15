@@ -64,6 +64,7 @@ function createCommentElement(text) {
   return element;
 }
 
+/** Deletes all comments on by the server.*/
 function deleteComments() {
   fetch('/delete-comments', {
     method: 'POST'

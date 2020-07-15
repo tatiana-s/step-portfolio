@@ -19,11 +19,8 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
-import com.google.gson.Gson;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,7 +32,7 @@ public class DeleteCommentServlet extends HttpServlet {
 
   /* Datastore data is represented by entities which have a kind and certain properties,
    * and the constants below define the kind and property names for comment entities.
-   * Changing them would mean comments saved with a previous definition would not be displayed anymore. */
+   * (See CommentServlet) */
   private static final String COMMENT_KIND = "Comment";
   private static final String CONTENT_PROPERTY = "content";
 
