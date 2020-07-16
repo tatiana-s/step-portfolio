@@ -45,7 +45,8 @@ function showSlides(newIndex) {
 
 /** Displays list of comments returned by the server.*/
 function showComments() {
-  fetch('/comments').then(response => response.json()).then(comments => {
+  const limit = document.getElementById("select-comment-number").value;
+  fetch('/comments?number=' + limit).then(response => response.json()).then(comments => {
     const commentsList = document.getElementById('text-container');
     commentsList.innerHTML = '';
     for(let i = 0; i < comments.length; i++) {
@@ -60,4 +61,11 @@ function createCommentElement(text) {
   element.innerText = text;
   element.className = "comment";
   return element;
+}
+
+/** Deletes all comments on by the server. */
+function deleteComments() {
+  fetch('/delete-comments', {
+    method: 'POST'
+  }).then(showComments());
 }

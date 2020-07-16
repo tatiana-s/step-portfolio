@@ -72,10 +72,32 @@ input[type=submit] {
   margin-bottom: 25px;
 }
 
+#text-container p {
+  font-size: 18px;
+}
+
 .comment {
   border-bottom: 1px solid white;
   margin-bottom: 10px;
   padding: 5px;
+}
+
+#select-comment-number {
+  background-color: yellowgreen;
+  border: none;
+  color: white;
+  margin: 5px;
+  max-width: 100%;
+  padding: 5px 5px;
+  width: 50px;
+}
+
+#delete-all {
+  background-color: yellowgreen;
+  border: none;
+  color: white;
+  padding: 5px 20px;
+  text-align: center;
 }
 
 /* title with animation */
