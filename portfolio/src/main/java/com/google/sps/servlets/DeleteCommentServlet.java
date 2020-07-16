@@ -34,9 +34,7 @@ public class DeleteCommentServlet extends HttpServlet {
 
   private static final String REDIRECT_URL = "/index.html";
 
-  /**
-   * Deletes all comments in the datastore database. 
-   */
+  /** Deletes all comments in the datastore database. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Query query = new Query(CommentEntity.KIND.getLabel());
