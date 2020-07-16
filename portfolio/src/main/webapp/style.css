@@ -51,10 +51,15 @@ body {
 }
 
 /* comments section */
-textarea {
+#comment-input {
   height: 100px;
   width: 50%;
 }
+
+#username-input { 
+  width: 25%;
+  margin-left: 5px;
+  margin-right: 10px; }
 
 input[type=submit] {
   background-color: yellowgreen;
@@ -92,6 +97,15 @@ input[type=submit] {
   width: 50px;
 }
 
+#select-mood {
+  background-color: white;
+  border: none;
+  margin: 5px;
+  max-width: 100%;
+  padding: 5px 5px;
+  width: 50px;
+}
+
 #delete-all {
   background-color: yellowgreen;
   border: none;
@@ -99,6 +113,8 @@ input[type=submit] {
   padding: 5px 20px;
   text-align: center;
 }
+
+hr { border: 1px solid yellowgreen; }
 
 /* title with animation */
 #typewriter {

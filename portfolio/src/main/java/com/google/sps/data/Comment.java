@@ -23,10 +23,11 @@ public final class Comment {
   private final long time;
   private final String mood;
 
-  public Comment(long id, String content, long time, String mood) {
+  public Comment(long id, String content, String author, long time, String mood) {
     this.id = id;
-    this.title = content;
-    this.timestamp = time;
+    this.content = content;
+    this.author = author;
+    this.time = time;
     this.mood = mood;
   }
 }
