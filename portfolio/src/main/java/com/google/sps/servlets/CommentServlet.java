@@ -48,7 +48,6 @@ public class CommentServlet extends HttpServlet {
     Query query = new Query(CommentEntity.KIND.getLabel());
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-
     FetchOptions limitComments = FetchOptions.Builder.withLimit(commentNumber);
     List<String> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(limitComments)) {
@@ -57,7 +56,6 @@ public class CommentServlet extends HttpServlet {
         comments.add((String) content);
       }
     }
-
     response.setContentType("application/json;");
     response.getWriter().println(convertToJson(comments));
   }

@@ -59,7 +59,7 @@ function showComments() {
 function createCommentElement(text) {
   const element = document.createElement('p');
   element.innerText = text;
-  element.className = "comment";
+  element.className = 'comment';
   return element;
 }
 
