@@ -18,7 +18,7 @@ let slideIndex = 0;
 
 /**
  * Helper function for naviagtion via arrows.
- * @param {number} offset - the number of slides to change by
+ * @param {number} offset The number of slides to change by
  * (negative numbers indicate going backwards).
  */
 function changeSlides(offset) {
@@ -28,7 +28,7 @@ function changeSlides(offset) {
 /**
  * Displays photo at new index by changing its display style
  * and setting the corresponding indicator.
- * @param {number} newIndex - Index of photo to be displayed.
+ * @param {number} newIndex Index of photo to be displayed.
  */
 function showSlides(newIndex) {
   const slides = document.getElementsByClassName('slide');
@@ -64,8 +64,8 @@ function showComments() {
 
 /**
  * Creates an <p> comment element containing text.
- * @param {string} text - The comment content.
- * @return {HTMLElement} - The html element.
+ * @param {string} text The comment content.
+ * @return {HTMLElement} The html element.
  */
 function createCommentElement(text) {
   const element = document.createElement('p');
