@@ -18,7 +18,6 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
-import com.google.appengine.api.datastore.FetchOptions.Builder;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
@@ -39,32 +38,26 @@ public class CommentServlet extends HttpServlet {
   private static final String REDIRECT_URL = "/index.html";
   private static final String COMMENT_NUMBER_QUERY_PARAM = "number";
 
-  /**
-   * Loads and returns comments from the datastore database.
-   */
+  /** Loads and returns comments from the datastore database. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     int commentNumber = Integer.parseInt(request.getParameter(COMMENT_NUMBER_QUERY_PARAM));
     Query query = new Query(CommentEntity.KIND.getLabel());
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
-
     FetchOptions limitComments = FetchOptions.Builder.withLimit(commentNumber);
     List<String> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(limitComments)) {
       Object content = entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
-      if(content instanceof String) {
+      if (content instanceof String) {
         comments.add((String) content);
       }
     }
-
     response.setContentType("application/json;");
     response.getWriter().println(convertToJson(comments));
   }
 
-  /**
-   * Saves comments entered in the comment form in the datastore database. 
-   */
+  /** Saves comments entered in the comment form in the datastore database. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = request.getParameter(INPUT_FORM_NAME);
@@ -75,9 +68,7 @@ public class CommentServlet extends HttpServlet {
     response.sendRedirect(REDIRECT_URL);
   }
 
-  /**
-   * Converts a list of strings into a JSON string using the Gson library.
-   */
+  /** Converts a list of strings into a JSON string using the Gson library. */
   private static String convertToJson(List<String> commentList) {
     Gson gson = new Gson();
     return gson.toJson(commentList);

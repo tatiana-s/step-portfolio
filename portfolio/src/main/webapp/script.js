@@ -12,24 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* eslint-disable no-unused-vars */
+
 let slideIndex = 0;
 
 /**
  * Helper function for naviagtion via arrows.
+ * @param {number} offset The number of slides to change by
+ * (negative numbers indicate going backwards).
  */
 function changeSlides(offset) {
   showSlides(slideIndex + offset);
 }
 
 /**
- * Displays photo at new index by changing its display style and setting the corresponding indicator.
+ * Displays photo at new index by changing its display style
+ * and setting the corresponding indicator.
+ * @param {number} newIndex Index of photo to be displayed.
  */
 function showSlides(newIndex) {
-  let slides = document.getElementsByClassName("slide");
-  let dots = document.getElementsByClassName("dot");
+  const slides = document.getElementsByClassName('slide');
+  const dots = document.getElementsByClassName('dot');
   // Hide the previous photo and indicator.
-  slides[slideIndex].style.display = "none";
-  dots[slideIndex].className = dots[slideIndex].className.replace("active", "");
+  slides[slideIndex].style.display = 'none';
+  dots[slideIndex].className = dots[slideIndex].className.replace('active', '');
   // Handle edge cases and set the new slide index.
   if (newIndex > slides.length - 1) {
     slideIndex = 0;
@@ -39,33 +45,38 @@ function showSlides(newIndex) {
     slideIndex = newIndex;
   }
   // Display the photo.
-  slides[slideIndex].style.display = "block";
-  dots[slideIndex].className += " active";
+  slides[slideIndex].style.display = 'block';
+  dots[slideIndex].className += ' active';
 }
 
 /** Displays list of comments returned by the server.*/
 function showComments() {
-  const limit = document.getElementById("select-comment-number").value;
-  fetch('/comments?number=' + limit).then(response => response.json()).then(comments => {
-    const commentsList = document.getElementById('text-container');
-    commentsList.innerHTML = '';
-    for(let i = 0; i < comments.length; i++) {
-      commentsList.appendChild(createCommentElement(comments[i]));
-    }
-  });
+  const limit = document.getElementById('select-comment-number').value;
+  fetch('/comments?number=' + limit)
+      .then((response) => response.json()).then((comments) => {
+        const commentsList = document.getElementById('text-container');
+        commentsList.innerHTML = '';
+        for (let i = 0; i < comments.length; i++) {
+          commentsList.appendChild(createCommentElement(comments[i]));
+        }
+      });
 }
 
-/** Creates an <p> comment element containing text. */
+/**
+ * Creates an <p> comment element containing text.
+ * @param {string} text The comment content.
+ * @return {HTMLElement} The html element.
+ */
 function createCommentElement(text) {
   const element = document.createElement('p');
   element.innerText = text;
-  element.className = "comment";
+  element.className = 'comment';
   return element;
 }
 
 /** Deletes all comments on by the server. */
 function deleteComments() {
   fetch('/delete-comments', {
-    method: 'POST'
+    method: 'POST',
   }).then(showComments());
 }
