@@ -15,7 +15,7 @@
 package com.google.sps.data;
 
 /** 
- * Specifies the kind and property names to use for comment entities in the datastore databse. 
+ * Specifies the kind and property names to use for comment entities in the datastore database. 
  */
 public enum CommentEntity {
   KIND("Comment"),
@@ -24,6 +24,7 @@ public enum CommentEntity {
   TIME_PROPERTY("time"),
   MOOD_PROPERTY("mood");
 
+  /* Labels comments and properties of comments in the database. */
   private final String label;
 
   private CommentEntity(String label) {

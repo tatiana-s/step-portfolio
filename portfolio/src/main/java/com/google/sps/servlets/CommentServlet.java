@@ -17,6 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.FetchOptions;
+import com.google.appengine.api.datastore.FetchOptions.Builder;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
@@ -33,36 +35,29 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comments")
 public class CommentServlet extends HttpServlet {
 
-  /* The name of the input form which is defined in the html of the main page. */
-  private static final String INPUT_FORM = "comment-input";
-
-  /* Specifies what URL the client is redirected to after a POST request. */
+  private static final String INPUT_FORM_NAME = "comment-input";
   private static final String REDIRECT_URL = "/index.html";
-
-  /* The query string parameter for the number of comments to be displayed as defined in the script. */
-  private static final String COMMENT_NUMBER_PARAM = "number";
+  private static final String COMMENT_NUMBER_QUERY_PARAM = "number";
 
   /**
    * Loads and returns comments from the datastore database.
    */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    int commentNumber = Integer.parseInt(request.getParameter(COMMENT_NUMBER_PARAM));
+    int commentNumber = Integer.parseInt(request.getParameter(COMMENT_NUMBER_QUERY_PARAM));
     Query query = new Query(CommentEntity.KIND.getLabel());
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
+
+    FetchOptions limitComments = FetchOptions.Builder.withLimit(commentNumber);
     List<String> comments = new ArrayList<>();
-    int count = 0;
-    for (Entity entity : results.asIterable()) {
+    for (Entity entity : results.asIterable(limitComments)) {
       Object content = entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
       if(content instanceof String) {
         comments.add((String) content);
       }
-      count++;
-      if (count == commentNumber) {
-        break;
-      }
     }
+
     response.setContentType("application/json;");
     response.getWriter().println(convertToJson(comments));
   }
@@ -72,7 +67,7 @@ public class CommentServlet extends HttpServlet {
    */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = request.getParameter(INPUT_FORM);
+    String comment = request.getParameter(INPUT_FORM_NAME);
     Entity commentEntity = new Entity(CommentEntity.KIND.getLabel());
     commentEntity.setProperty(CommentEntity.CONTENT_PROPERTY.getLabel(), comment);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

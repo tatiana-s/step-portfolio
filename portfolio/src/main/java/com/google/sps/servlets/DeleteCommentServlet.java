@@ -28,11 +28,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet for deleting comments */
+/** Servlet for deleting comments. */
 @WebServlet("/delete-comments")
 public class DeleteCommentServlet extends HttpServlet {
 
-  /* This specifies what URL the client is redirected to after a POST request. */
   private static final String REDIRECT_URL = "/index.html";
 
   /**
