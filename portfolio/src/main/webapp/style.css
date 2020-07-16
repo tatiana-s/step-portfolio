@@ -3,17 +3,17 @@ a {
   color: yellowgreen;
 }
 
-img { 
+img {
   align-content: center;
-  box-shadow: 0px 3px 15px rgba(0,0,0,0.5);
-  height:auto; 
-  max-width:100%; 
-} 
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.5);
+  height: auto;
+  max-width: 100%;
+}
 
 body {
   background-color: rgb(25, 56, 76);
   color: white;
-  font-family: 'Assistant';
+  font-family: 'Assistant', sans-serif;
   font-size: 22px;
   margin-left: 50px;
   margin-right: auto;
@@ -25,7 +25,7 @@ body {
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: auto;
-  grid-template-areas: 
+  grid-template-areas:
     "image1 content1"
     "image2 content2";
 }
@@ -106,8 +106,9 @@ input[type=submit] {
 }
 
 #title {
-  animation: animated-title 3s steps(20, end),
-             animated-cursor .75s step-end infinite;
+  animation:
+    animated-title 3s steps(20, end),
+    animated-cursor 0.75s step-end infinite;
   border-right: 4px solid yellowgreen;
   box-sizing: border-box;
   display: inline-block;
@@ -119,15 +120,18 @@ input[type=submit] {
   from {
     width: 0%;
   }
+
   to {
     width: 100%;
   }
 }
 
-@keyframes animated-cursor{
-  from, to {
+@keyframes animated-cursor {
+  from,
+  to {
     border-right-color: transparent;
   }
+
   50% {
     border-right-color: yellowgreen;
   }
@@ -146,12 +150,11 @@ input[type=submit] {
   display: none;
 }
 
-#back {
-    font-size: 14px;
-}
+#back { font-size: 14px; }
 
 /* slideshow: arrows for previous and next image */
-.prev, .next {
+.prev,
+.next {
   border-radius: 0 5px 5px 0;
   color: yellowgreen;
   cursor: pointer;
@@ -171,14 +174,11 @@ input[type=submit] {
   border-radius: 5px 0 0 5px;
 }
 
-.prev:hover, .next:hover {
-  background-color: rgba(0,0,0,0.8);
-}
+.prev:hover,
+.next:hover { background-color: rgba(0, 0, 0, 0.8); }
 
 /* slideshow: position indicator dots including animation on hover and when active */
-#dots {
-  text-align:center;
-}
+#dots { text-align: center; }
 
 .dot {
   background-color: #bbb;
@@ -191,7 +191,8 @@ input[type=submit] {
   width: 20px;
 }
 
-.active, .dot:hover {
+.active,
+.dot:hover {
   background-color: #717171;
 }
 
@@ -204,8 +205,9 @@ input[type=submit] {
 
 @-webkit-keyframes fade {
   from {
-    opacity: .4;
+    opacity: 0.4;
   }
+
   to {
     opacity: 1;
   }
@@ -213,8 +215,9 @@ input[type=submit] {
 
 @keyframes fade {
   from {
-    opacity: .4;
+    opacity: 0.4;
   }
+
   to {
     opacity: 1;
   }

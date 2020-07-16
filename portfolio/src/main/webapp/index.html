@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Portfolio</title>
     <link rel="stylesheet" href="style.css">
-    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Assistant'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Assistant">
     <script src="script.js"></script>
   </head>
   <body onload="showComments()">
@@ -15,20 +15,18 @@
       <p>I am a computer science student and artist and this is my portfolio.</p>
     </div>
     <div class="sections">
-      <img src="/images/mountains2.jpg" id="image1"/>
+      <img src="/images/mountains2.jpg" id="image1" alt="Mountains"/>
         <div id="content1">
           <h2>About</h2>
-          <p>This is created for the Google Student Training in Engineering Program!
-            If you like the photo on the left, you can find a small gallery of various other photos I've taken <a href="photos.html">here</a>.</p>
+          <p>This is created for the Google Student Training in Engineering Program! If you like the photo on the left, you can find a small gallery of various other photos I've taken <a href="photos.html">here</a>.</p>
         </div>
-        <img src="/images/mandelbulb.png" id="image2"/>
+        <img src="/images/mandelbulb.png" id="image2" alt="Mandelbulb" />
         <div id="content2">
           <h2>Projects</h2>
-            <p> You can find some programming projects I've done (like the ray-marched Mandelbulb on the left for example) on <a href="https://github.com/tatiana-s">GitHub</a>, 
-            while my art can be found on <a href="https://www.instagram.com/tatiana.victors/">Instagram</a>.</p>
+            <p> You can find some programming projects I've done (like the ray-marched Mandelbulb on the left for example) on <a href="https://github.com/tatiana-s">GitHub</a>, while my art can be found on <a href="https://www.instagram.com/tatiana.victors/">Instagram</a>.</p>
+          </div>
         </div>
-    </div>
-    <div class="comments">
+      <div class="comments">
       <h2>Comments</h2>
         <form id="comments-form" action="/comments" method="POST">
           <p>Enter your comment here:</p>
@@ -37,8 +35,8 @@
           <input type="submit"/>
         </form>
       <div id="text-container"></div>
-      <label for="comment-number">Maximum number of comments to display on one page: </label>
-      <select name="comment-number" id="select-comment-number" onchange="showComments()">
+      <label for="select-comment-number">Maximum number of comments to display on one page: </label>
+      <select id="select-comment-number" onchange="showComments()">
         <option value="2">2</option>
         <option value="4" selected>4</option>
         <option value="8">8</option>
