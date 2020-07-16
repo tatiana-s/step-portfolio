@@ -1,0 +1,29 @@
+{
+  "name": "step-portfolio",
+  "version": "1.0.0",
+  "description": "This repo contains Tatiana's portfolio and STEP projects.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tatiana-s/step-portfolio.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tatiana-s/step-portfolio/issues"
+  },
+  "homepage": "https://github.com/tatiana-s/step-portfolio#readme",
+  "devDependencies": {
+    "eslint": "^7.4.0",
+    "eslint-config-google": "^0.14.0",
+    "htmllint-cli": "0.0.7",
+    "stylelint": "^13.6.1",
+    "stylelint-config-standard": "^20.0.0"
+  }
+}
