@@ -76,7 +76,7 @@ public class CommentServlet extends HttpServlet {
       comments.add(new Comment(id, content, user, time, mood));
     }
 
-    response.setContentType("application/json;"); 
+    response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(convertToJson(comments));
   }
@@ -111,7 +111,7 @@ public class CommentServlet extends HttpServlet {
   /** Checks if the request parameter is specified in the client and returns default if not. */
   private static String getParameter(HttpServletRequest request, String name, String defaultValue) {
     String value = request.getParameter(name);
-    if(value == null || value.isEmpty()) {
+    if (value == null || value.isEmpty()) {
       return defaultValue;
     }
     return value;
