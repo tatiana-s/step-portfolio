@@ -57,25 +57,46 @@ function showComments() {
         const commentsList = document.getElementById('text-container');
         commentsList.innerHTML = '';
         for (let i = 0; i < comments.length; i++) {
-          commentsList.appendChild(createCommentElement(comments[i].content));
+          commentsList.appendChild(createCommentElement(comments[i]));
         }
       });
 }
 
 /**
  * Creates an <p> comment element containing text.
- * @param {string} text The comment content.
+ * @param {Object} comment The comment object.
  * @return {HTMLElement} The html element.
  */
-function createCommentElement(text) {
-  const element = document.createElement('p');
-  element.innerText = text;
+function createCommentElement(comment) {
+  const element = document.createElement('div');
   element.className = 'comment';
+  const username = document.createElement('span');
+  username.innerText = comment.user;
+  username.className = 'comment-username'
+  const mood = document.createElement('span');
+  mood.innerText = comment.mood;
+  mood.className = 'comment-mood'
+  const content = document.createElement('p');
+  content.innerText = comment.content;
+  content.className = 'comment-content'
+
+  const deleteButton = document.createElement('button');
+  deleteButton.className = "delete-button"
+  deleteButton.innerText = 'Delete';
+  deleteButton.addEventListener('click', () => {
+    deleteComment(comment);
+    element.remove();
+  });
+
+  element.appendChild(mood);
+  element.appendChild(username);
+  element.appendChild(deleteButton);
+  element.appendChild(content);
   return element;
 }
 
 /** Deletes all comments on by the server. */
-function deleteComments() {
+function deleteComment() {
   fetch('/delete-comments', {
     method: 'POST',
   }).then(showComments());

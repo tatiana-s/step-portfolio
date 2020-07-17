@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.sps.data.Comment;
 import com.google.sps.data.CommentEntity;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class CommentServlet extends HttpServlet {
   /** Loads and returns comments from the datastore database. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    int commentNumber = 0;
+    int commentNumber = 10;
     try {
       Integer.parseInt(request.getParameter(COMMENT_NUMBER_QUERY_PARAM));
     } catch (NumberFormatException e) {
@@ -60,13 +61,14 @@ public class CommentServlet extends HttpServlet {
     for (Entity entity : results.asIterable(limitComments)) {
       long id = entity.getKey().getId();
       String content = (String) entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
-      String user = (String) entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
-      long time = (long) entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
-      String mood = (String) entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
+      String user = (String) entity.getProperty(CommentEntity.USER_PROPERTY.getLabel());
+      long time = (long) entity.getProperty(CommentEntity.TIME_PROPERTY.getLabel());
+      String mood = (String) entity.getProperty(CommentEntity.MOOD_PROPERTY.getLabel());
       comments.add(new Comment(id, content, user, time, mood));
     }
 
-    response.setContentType("application/json;");
+    response.setContentType("application/json;"); 
+    response.setCharacterEncoding("UTF-8");
     response.getWriter().println(convertToJson(comments));
   }
 
@@ -93,7 +95,7 @@ public class CommentServlet extends HttpServlet {
 
   /** Converts a list of comments into a JSON string using the Gson library. */
   private static String convertToJson(List<Comment> commentList) {
-    Gson gson = new Gson();
+    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     return gson.toJson(commentList);
   }
 
