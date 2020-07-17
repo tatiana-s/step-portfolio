@@ -17,8 +17,8 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Key;
+import com.google.appengine.api.datastore.KeyFactory;
 import com.google.sps.data.CommentEntity;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,16 +34,13 @@ public class DeleteCommentServlet extends HttpServlet {
 
   private static final String REDIRECT_URL = "/index.html";
 
-  /** Deletes all comments in the datastore database. */
+  /** Deletes a comment specified by the passed ID. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(CommentEntity.KIND.getLabel());
+    long id = Long.parseLong(request.getParameter("id"));
+    Key commentEntityKey = KeyFactory.createKey("Comment", id);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-    List<String> comments = new ArrayList<>();
-    for (Entity entity : results.asIterable()) {
-      datastore.delete(entity.getKey());
-    }
+    datastore.delete(commentEntityKey);
     response.sendRedirect(REDIRECT_URL);
   }
 }

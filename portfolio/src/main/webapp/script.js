@@ -84,8 +84,8 @@ function createCommentElement(comment) {
   deleteButton.className = "delete-button"
   deleteButton.innerText = 'Delete';
   deleteButton.addEventListener('click', () => {
-    deleteComment(comment);
     element.remove();
+    deleteComment(comment);
   });
 
   element.appendChild(mood);
@@ -96,8 +96,11 @@ function createCommentElement(comment) {
 }
 
 /** Deletes all comments on by the server. */
-function deleteComment() {
+function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
   fetch('/delete-comments', {
     method: 'POST',
+    body: params,
   }).then(showComments());
 }
