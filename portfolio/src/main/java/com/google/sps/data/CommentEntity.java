@@ -20,7 +20,7 @@ package com.google.sps.data;
 public enum CommentEntity {
   KIND("Comment"),
   CONTENT_PROPERTY("content"),
-  AUTHOR_PROPERTY("author"),
+  USER_PROPERTY("user"),
   TIME_PROPERTY("time"),
   MOOD_PROPERTY("mood");
 

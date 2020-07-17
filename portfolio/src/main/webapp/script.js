@@ -57,7 +57,7 @@ function showComments() {
         const commentsList = document.getElementById('text-container');
         commentsList.innerHTML = '';
         for (let i = 0; i < comments.length; i++) {
-          commentsList.appendChild(createCommentElement(comments[i]));
+          commentsList.appendChild(createCommentElement(comments[i].content));
         }
       });
 }
