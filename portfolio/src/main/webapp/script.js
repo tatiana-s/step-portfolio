@@ -19,7 +19,7 @@ let slideIndex = 0;
 
 /** Current filter settings in  comment section. */
 let commentLimit = 4;
-let sortOrder = "new";
+let sortOrder = 'new';
 
 /**
  * Helper function for naviagtion via arrows.
@@ -54,12 +54,14 @@ function showSlides(newIndex) {
   dots[slideIndex].className += ' active';
 }
 
+/** Called when comment number limit selector changes. */
 function changeLimit() {
   const limit = document.getElementById('select-comment-number').value;
   commentLimit = limit;
   showComments();
 }
 
+/** Called when sorting order selector changes. */
 function changeSort() {
   const sort = document.getElementById('select-comment-sort').value;
   sortOrder = sort;
@@ -68,8 +70,8 @@ function changeSort() {
 
 /** Displays list of comments returned by the server.*/
 function showComments() {
-  let url = new URL(window.location.origin + '/comments');
-  const params = {limit:commentLimit, sort:sortOrder};
+  const url = new URL(window.location.origin + '/comments');
+  const params = {limit: commentLimit, sort: sortOrder};
   url.search = new URLSearchParams(params).toString();
   fetch(url)
       .then((response) => response.json()).then((comments) => {
@@ -91,16 +93,16 @@ function createCommentElement(comment) {
   element.className = 'comment';
   const username = document.createElement('span');
   username.innerText = comment.user;
-  username.className = 'comment-username'
+  username.className = 'comment-username';
   const mood = document.createElement('span');
   mood.innerText = comment.mood;
-  mood.className = 'comment-mood'
+  mood.className = 'comment-mood';
   const content = document.createElement('p');
   content.innerText = comment.content;
-  content.className = 'comment-content'
+  content.className = 'comment-content';
 
   const deleteButton = document.createElement('button');
-  deleteButton.className = "delete-button"
+  deleteButton.className = 'delete-button';
   deleteButton.innerText = 'Delete';
   deleteButton.addEventListener('click', () => {
     element.remove();
@@ -114,7 +116,10 @@ function createCommentElement(comment) {
   return element;
 }
 
-/** Deletes all comments on by the server. */
+/**
+ * Deletes all comments on by the server.
+ * @param {Object} comment The comment object.
+ */
 function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);

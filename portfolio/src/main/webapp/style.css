@@ -56,10 +56,11 @@ body {
   width: 50%;
 }
 
-#username-input { 
+#username-input {
   width: 25%;
   margin-left: 5px;
-  margin-right: 10px; }
+  margin-right: 10px;
+}
 
 input[type=submit] {
   background-color: yellowgreen;
@@ -103,7 +104,6 @@ input[type=submit] {
   padding: 5px 20px;
   text-align: center;
 }
-
 
 #select-comment-number {
   background-color: white;
