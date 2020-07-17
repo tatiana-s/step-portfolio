@@ -36,9 +36,9 @@
           <input type=text name="username-input" id="username-input"/>
           <label for="select-mood">Mood: </label>
           <select name="select-mood" id="select-mood">
-            <option value="😀" selected>😀</option>
+            <option value="😀">😀</option>
             <option value="🤔">🤔</option>
-            <option value="🤠">🤠</option>
+            <option value="🤠" selected>🤠</option>
             <option value="☹️">☹️</option>
             <option value="👽">👽</option>
           </select>
@@ -48,12 +48,19 @@
       <hr>
       <div id="text-container"></div>
       <hr>
+      <h3>Comment Settings</h3>
       <label for="select-comment-number">Maximum number of comments to display on one page: </label>
-      <select id="select-comment-number" onchange="showComments()">
+      <select id="select-comment-number" onchange="changeLimit()">
         <option value="2">2</option>
         <option value="4" selected>4</option>
         <option value="8">8</option>
         <option value="16">16</option>
+      </select>
+      <br></br>
+      <label for="select-comment-sort">Sort comments according to timestamp with: </label>
+      <select id="select-comment-sort" onchange="changeSort()">
+        <option value="new" selected>Newest first</option>
+        <option value="old">Oldest first</option>
       </select>
     </div>
   </body>

@@ -102,18 +102,25 @@ input[type=submit] {
   float: right;
   padding: 5px 20px;
   text-align: center;
-
 }
 
 
 #select-comment-number {
-  background-color: yellowgreen;
+  background-color: white;
   border: none;
-  color: white;
   margin: 5px;
   max-width: 100%;
   padding: 5px 5px;
   width: 50px;
+}
+
+#select-comment-sort {
+  background-color: white;
+  border: none;
+  margin: 5px;
+  max-width: 100%;
+  padding: 5px 5px;
+  width: 100px;
 }
 
 #select-mood {

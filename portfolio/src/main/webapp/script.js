@@ -14,7 +14,12 @@
 
 /* eslint-disable no-unused-vars */
 
+/** Current slide index in photo gallery. */
 let slideIndex = 0;
+
+/** Current filter settings in  comment section. */
+let commentLimit = 4;
+let sortOrder = "new";
 
 /**
  * Helper function for naviagtion via arrows.
@@ -49,10 +54,24 @@ function showSlides(newIndex) {
   dots[slideIndex].className += ' active';
 }
 
+function changeLimit() {
+  const limit = document.getElementById('select-comment-number').value;
+  commentLimit = limit;
+  showComments();
+}
+
+function changeSort() {
+  const sort = document.getElementById('select-comment-sort').value;
+  sortOrder = sort;
+  showComments();
+}
+
 /** Displays list of comments returned by the server.*/
 function showComments() {
-  const limit = document.getElementById('select-comment-number').value;
-  fetch('/comments?number=' + limit)
+  let url = new URL(window.location.origin + '/comments');
+  const params = {limit:commentLimit, sort:sortOrder};
+  url.search = new URLSearchParams(params).toString();
+  fetch(url)
       .then((response) => response.json()).then((comments) => {
         const commentsList = document.getElementById('text-container');
         commentsList.innerHTML = '';

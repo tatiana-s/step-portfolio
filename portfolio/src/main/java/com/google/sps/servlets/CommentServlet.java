@@ -20,6 +20,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.sps.data.Comment;
@@ -40,22 +41,30 @@ public class CommentServlet extends HttpServlet {
   private static final String USER_FORM_NAME = "username-input";
   private static final String MOOD_FORM_NAME = "select-mood";
   private static final String REDIRECT_URL = "/index.html";
-  private static final String COMMENT_NUMBER_QUERY_PARAM = "number";
+  private static final String COMMENT_NUMBER_QUERY_PARAM = "limit";
+  private static final String SORT_ORDER_QUERY_PARAM = "sort";
   private static final String DEFAULT_USERNAME = "Anonymous";
 
   /** Loads and returns comments from the datastore database. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    int commentNumber = 10;
-    try {
-      Integer.parseInt(request.getParameter(COMMENT_NUMBER_QUERY_PARAM));
-    } catch (NumberFormatException e) {
-      e.printStackTrace();
-    }
     Query query = new Query(CommentEntity.KIND.getLabel());
+    String sortOrder = request.getParameter(SORT_ORDER_QUERY_PARAM);
+    switch (sortOrder) {
+      case "new":
+        query.addSort("time", SortDirection.DESCENDING);
+        break;
+      case "old":
+        query.addSort("time", SortDirection.ASCENDING);
+        break;
+      default:
+        query.addSort("time", SortDirection.DESCENDING);
+    }
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     PreparedQuery results = datastore.prepare(query);
 
+    int commentNumber = Integer.parseInt(request.getParameter(COMMENT_NUMBER_QUERY_PARAM));
     FetchOptions limitComments = FetchOptions.Builder.withLimit(commentNumber);
     List<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable(limitComments)) {
