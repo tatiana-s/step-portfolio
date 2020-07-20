@@ -120,11 +120,12 @@ function createCommentElement(comment) {
  * Deletes all comments on by the server.
  * @param {Object} comment The comment object.
  */
-function deleteComment(comment) {
+async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  fetch('/delete-comments', {
+  await fetch('/delete-comments', {
     method: 'POST',
     body: params,
-  }).then(showComments());
+  });
+  showComments();
 }
