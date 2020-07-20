@@ -86,6 +86,10 @@ function showComments() {
       });
 }
 
+function checkLogin() {
+  fetch('/user')
+}
+
 /**
  * Creates an <p> comment element containing text.
  * @param {Object} comment The comment object.

@@ -70,6 +70,14 @@ input[type=submit] {
   text-align: center;
 }
 
+#login-link {
+  display: none;
+}
+
+#comment-section {
+  display: none;
+}
+
 #comment-form {
   margin-bottom: 25px;
 }
