@@ -17,7 +17,7 @@
 /** Current slide index in photo gallery. */
 let slideIndex = 0;
 
-/** Current filter settings in  comment section. */
+/** Current filter settings in comment section. */
 let commentLimit = 4;
 let sortOrder = 'new';
 
@@ -54,17 +54,20 @@ function showSlides(newIndex) {
   dots[slideIndex].className += ' active';
 }
 
-/** Called when comment number limit selector changes. */
-function changeLimit() {
-  const limit = document.getElementById('select-comment-number').value;
-  commentLimit = limit;
+/** Called when website is loaded. */
+function init() {
   showComments();
 }
 
-/** Called when sorting order selector changes. */
+/** Called when comment number limit selector changes: changes limit. */
+function changeLimit() {
+  commentLimit = document.getElementById('select-comment-number').value;
+  showComments();
+}
+
+/** Called when sorting order selector changes an: changes sorting order. */
 function changeSort() {
-  const sort = document.getElementById('select-comment-sort').value;
-  sortOrder = sort;
+  sortOrder = document.getElementById('select-comment-sort').value;
   showComments();
 }
 

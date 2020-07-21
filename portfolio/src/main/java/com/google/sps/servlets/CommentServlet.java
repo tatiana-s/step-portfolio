@@ -44,6 +44,7 @@ public class CommentServlet extends HttpServlet {
   private static final String COMMENT_NUMBER_QUERY_PARAM = "limit";
   private static final String SORT_ORDER_QUERY_PARAM = "sort";
   private static final String DEFAULT_USERNAME = "Anonymous";
+  private static final int MAX_COMMENT_LENGHT = 500;
 
   /** Loads and returns comments from the datastore database. */
   @Override
@@ -51,12 +52,10 @@ public class CommentServlet extends HttpServlet {
     Query query = new Query(CommentEntity.KIND.getLabel());
     String sortOrder = request.getParameter(SORT_ORDER_QUERY_PARAM);
     switch (sortOrder) {
-      case "new":
-        query.addSort("time", SortDirection.DESCENDING);
-        break;
       case "old":
         query.addSort("time", SortDirection.ASCENDING);
         break;
+      case "new":
       default:
         query.addSort("time", SortDirection.DESCENDING);
     }
@@ -89,7 +88,7 @@ public class CommentServlet extends HttpServlet {
     String mood = getParameter(request, MOOD_FORM_NAME, "");
     long time = System.currentTimeMillis();
 
-    if (!comment.isEmpty()) {
+    if (!comment.isEmpty() && !(comment.length() > MAX_COMMENT_LENGHT)) {
       Entity commentEntity = new Entity(CommentEntity.KIND.getLabel());
       commentEntity.setProperty(CommentEntity.CONTENT_PROPERTY.getLabel(), comment);
       commentEntity.setProperty(CommentEntity.USER_PROPERTY.getLabel(), user);
@@ -98,7 +97,7 @@ public class CommentServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);
     }
-
+    
     response.sendRedirect(REDIRECT_URL);
   }
 

@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Assistant">
     <script src="script.js"></script>
   </head>
-  <body onload="showComments()">
+  <body onload="init()">
     <div id="header">
       <div id="typewriter">
         <h1 id="title">Hi, I am Tatiana.</h1>
@@ -29,10 +29,10 @@
       <div class="comments">
       <h2>Comments</h2>
         <form id="comments-form" action="/comments" method="POST">
-          <p>Enter your comment here:</p>
+          <p>Enter your comment here:*</p>
           <textarea name="comment-input" id="comment-input"></textarea>
-          <br></br>
-          <label for="username-input">Username: </label>
+          <p id="restrictions">*Comment can't be empty or longer than 500 characters.</p>
+          <label for="username-input">Username (optional): </label>
           <input type=text name="username-input" id="username-input"/>
           <label for="select-mood">Mood: </label>
           <select name="select-mood" id="select-mood">

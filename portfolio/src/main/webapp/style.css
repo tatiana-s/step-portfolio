@@ -88,6 +88,10 @@ input[type=submit] {
   padding: 5px;
 }
 
+#restrictions {
+  font-size: 12px;
+}
+
 .comment-username {
   font-size: 18px;
   font-weight: bold;
@@ -126,6 +130,7 @@ input[type=submit] {
 #select-mood {
   background-color: white;
   border: none;
+  height: auto;
   margin: 5px;
   max-width: 100%;
   padding: 5px 5px;
