@@ -71,12 +71,14 @@ function changeSort() {
   showComments();
 }
 
-/** Displays list of comments returned by the server.*/
-function showComments() {
-  const url = new URL(window.location.origin + '/comments');
-  const params = {limit: commentLimit, sort: sortOrder};
-  url.search = new URLSearchParams(params).toString();
-  fetch(url)
+/** Displays list of comments returned by the server if user is logged in.*/
+async function showComments() {
+  let loggedIn = await checkLoginStatus();
+  if (loggedIn) {
+    const url = new URL(window.location.origin + '/comments');
+    const params = {limit: commentLimit, sort: sortOrder};
+    url.search = new URLSearchParams(params).toString();
+    fetch(url)
       .then((response) => response.json()).then((comments) => {
         const commentsList = document.getElementById('text-container');
         commentsList.innerHTML = '';
@@ -84,10 +86,33 @@ function showComments() {
           commentsList.appendChild(createCommentElement(comments[i]));
         }
       });
+    document.getElementById('comment-section').style.display = 'block';
+  } else {
+    document.getElementById('comment-section').style.display = 'none';
+  }
 }
 
-function checkLogin() {
-  fetch('/user')
+async function checkLoginStatus() {
+  const response = await fetch('/user');
+  const status = await response.json();
+  const message = document.getElementById('login-message');
+  message.innerHTML = '';
+  message.append(createLoginMessage(status));
+  return status.loggedIn;
+}
+
+function createLoginMessage(status) {
+  const element = document.createElement('span');
+  if (status.loggedIn) {
+    element.innerText = 'You are currently logged in as ' + status.userEmail + ', log out ';
+  } else {
+    element.innerText = 'You need to log in to see comments, log in ';
+  }
+  const link = document.createElement('a');
+  link.href = status.link;
+  link.innerHTML = 'here.';
+  element.append(link);
+  return element;
 }
 
 /**

@@ -70,10 +70,6 @@ input[type=submit] {
   text-align: center;
 }
 
-#login-link {
-  display: none;
-}
-
 #comment-section {
   display: none;
 }
