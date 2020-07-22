@@ -65,7 +65,7 @@ function changeLimit() {
   showComments();
 }
 
-/** Called when sorting order selector changes an: changes sorting order. */
+/** Called when sorting order selector changes: changes sorting order. */
 function changeSort() {
   sortOrder = document.getElementById('select-comment-sort').value;
   showComments();
