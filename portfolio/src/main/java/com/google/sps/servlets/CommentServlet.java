@@ -70,10 +70,11 @@ public class CommentServlet extends HttpServlet {
     for (Entity entity : results.asIterable(limitComments)) {
       long id = entity.getKey().getId();
       String content = (String) entity.getProperty(CommentEntity.CONTENT_PROPERTY.getLabel());
-      String user = (String) entity.getProperty(CommentEntity.USER_PROPERTY.getLabel());
+      String email = (String) entity.getProperty(CommentEntity.EMAIL_PROPERTY.getLabel());
+      String username = (String) entity.getProperty(CommentEntity.USERNAME_PROPERTY.getLabel());
       long time = (long) entity.getProperty(CommentEntity.TIME_PROPERTY.getLabel());
       String mood = (String) entity.getProperty(CommentEntity.MOOD_PROPERTY.getLabel());
-      comments.add(new Comment(id, content, user, time, mood));
+      comments.add(new Comment(id, content, email, username, time, mood));
     }
 
     response.setContentType("application/json;");
@@ -94,7 +95,7 @@ public class CommentServlet extends HttpServlet {
       Entity commentEntity = new Entity(CommentEntity.KIND.getLabel());
       commentEntity.setProperty(CommentEntity.CONTENT_PROPERTY.getLabel(), comment);
       commentEntity.setProperty(CommentEntity.EMAIL_PROPERTY.getLabel(), email);
-      commentEntity.setProperty(CommentEntity.USER_PROPERTY.getLabel(), user);
+      commentEntity.setProperty(CommentEntity.USERNAME_PROPERTY.getLabel(), user);
       commentEntity.setProperty(CommentEntity.TIME_PROPERTY.getLabel(), time);
       commentEntity.setProperty(CommentEntity.MOOD_PROPERTY.getLabel(), mood);
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

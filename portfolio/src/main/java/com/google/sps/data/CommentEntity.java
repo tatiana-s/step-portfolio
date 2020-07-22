@@ -19,7 +19,7 @@ public enum CommentEntity {
   KIND("Comment"),
   CONTENT_PROPERTY("content"),
   EMAIL_PROPERTY("email"),
-  USER_PROPERTY("user"),
+  USERNAME_PROPERTY("user"),
   TIME_PROPERTY("time"),
   MOOD_PROPERTY("mood");
 
