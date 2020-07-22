@@ -29,24 +29,24 @@
       <div class="comments">
         <h2>Comments</h2>
         <div id="login-message"></div>
-        <div id="comment-section">
-          <form id="comments-form" action="/comments" method="POST">
-            <p>Enter your comment here:</p>
-            <textarea name="comment-input" id="comment-input"></textarea>
-            <br></br>
-            <label for="username-input">Username: </label>
-            <input type=text name="username-input" id="username-input"/>
-            <label for="select-mood">Mood: </label>
-            <select name="select-mood" id="select-mood">
-              <option value="😀">😀</option>
-              <option value="🤔">🤔</option>
-              <option value="🤠" selected>🤠</option>
-              <option value="☹️">☹️</option>
-              <option value="👽">👽</option>
-            </select>
-            <br></br>
-            <input type="submit"/>
-          </form>
+        <form id="comments-form" action="/comments" method="POST">
+          <input type=hidden name="email-input" id="email-input"/>
+          <p>Enter your comment here:</p>
+          <textarea name="comment-input" id="comment-input"></textarea>
+          <br></br>
+          <label for="username-input">Username: </label>
+          <input type=text name="username-input" id="username-input"/>
+          <label for="select-mood">Mood: </label>
+          <select name="select-mood" id="select-mood">
+            <option value="😀">😀</option>
+            <option value="🤔">🤔</option>
+            <option value="🤠" selected>🤠</option>
+            <option value="☹️">☹️</option>
+            <option value="👽">👽</option>
+          </select>
+          <br></br>
+          <input type="submit"/>
+        </form>
         <hr>
         <div id="text-container"></div>
         <hr>

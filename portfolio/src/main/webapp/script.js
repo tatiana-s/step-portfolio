@@ -56,7 +56,41 @@ function showSlides(newIndex) {
 
 /** Called when website is loaded. */
 function init() {
+  showCommentForm();
   showComments();
+}
+
+async function showCommentForm() {
+  const status = await checkLoginStatus();
+  const message = document.getElementById('login-message');
+  message.innerHTML = '';
+  message.append(createLoginMessage(status));
+  document.getElementById('email-input').value = status.userEmail;
+  if (status.loggedIn) {
+    document.getElementById('comments-form').style.display = 'block';
+  } else {
+    document.getElementById('comments-form').style.display = 'none';
+  }
+}
+
+async function checkLoginStatus() {
+  const response = await fetch('/user');
+  const status = await response.json();
+  return status;
+}
+
+function createLoginMessage(status) {
+  const element = document.createElement('span');
+  if (status.loggedIn) {
+    element.innerText = 'You are currently logged in as ' + status.userEmail + ', log out ';
+  } else {
+    element.innerText = 'You need to log in to leave comments, log in ';
+  }
+  const link = document.createElement('a');
+  link.href = status.link;
+  link.innerHTML = 'here.';
+  element.append(link);
+  return element;
 }
 
 /** Called when comment number limit selector changes: changes limit. */
@@ -72,47 +106,18 @@ function changeSort() {
 }
 
 /** Displays list of comments returned by the server if user is logged in.*/
-async function showComments() {
-  let loggedIn = await checkLoginStatus();
-  if (loggedIn) {
-    const url = new URL(window.location.origin + '/comments');
-    const params = {limit: commentLimit, sort: sortOrder};
-    url.search = new URLSearchParams(params).toString();
-    fetch(url)
-      .then((response) => response.json()).then((comments) => {
-        const commentsList = document.getElementById('text-container');
-        commentsList.innerHTML = '';
-        for (let i = 0; i < comments.length; i++) {
-          commentsList.appendChild(createCommentElement(comments[i]));
-        }
-      });
-    document.getElementById('comment-section').style.display = 'block';
-  } else {
-    document.getElementById('comment-section').style.display = 'none';
-  }
-}
-
-async function checkLoginStatus() {
-  const response = await fetch('/user');
-  const status = await response.json();
-  const message = document.getElementById('login-message');
-  message.innerHTML = '';
-  message.append(createLoginMessage(status));
-  return status.loggedIn;
-}
-
-function createLoginMessage(status) {
-  const element = document.createElement('span');
-  if (status.loggedIn) {
-    element.innerText = 'You are currently logged in as ' + status.userEmail + ', log out ';
-  } else {
-    element.innerText = 'You need to log in to see comments, log in ';
-  }
-  const link = document.createElement('a');
-  link.href = status.link;
-  link.innerHTML = 'here.';
-  element.append(link);
-  return element;
+function showComments() {
+  const url = new URL(window.location.origin + '/comments');
+  const params = {limit: commentLimit, sort: sortOrder};
+  url.search = new URLSearchParams(params).toString();
+  fetch(url)
+    .then((response) => response.json()).then((comments) => {
+      const commentsList = document.getElementById('text-container');
+      commentsList.innerHTML = '';
+      for (let i = 0; i < comments.length; i++) {
+        commentsList.appendChild(createCommentElement(comments[i]));
+      }
+    });
 }
 
 /**

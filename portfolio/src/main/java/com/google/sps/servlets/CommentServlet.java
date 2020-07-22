@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CommentServlet extends HttpServlet {
 
   private static final String COMMENT_FORM_NAME = "comment-input";
+  private static final String EMAIL_FORM_NAME = "email-input";
   private static final String USER_FORM_NAME = "username-input";
   private static final String MOOD_FORM_NAME = "select-mood";
   private static final String REDIRECT_URL = "/index.html";
@@ -84,13 +85,15 @@ public class CommentServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = getParameter(request, COMMENT_FORM_NAME, "");
+    String email = getParameter(request, EMAIL_FORM_NAME, "");
     String user = getParameter(request, USER_FORM_NAME, DEFAULT_USERNAME);
     String mood = getParameter(request, MOOD_FORM_NAME, "");
     long time = System.currentTimeMillis();
 
-    if (!comment.isEmpty() && !(comment.length() > MAX_COMMENT_LENGHT)) {
+    if (!comment.isEmpty() && !(comment.length() > MAX_COMMENT_LENGHT) && !email.isEmpty()) {
       Entity commentEntity = new Entity(CommentEntity.KIND.getLabel());
       commentEntity.setProperty(CommentEntity.CONTENT_PROPERTY.getLabel(), comment);
+      commentEntity.setProperty(CommentEntity.EMAIL_PROPERTY.getLabel(), email);
       commentEntity.setProperty(CommentEntity.USER_PROPERTY.getLabel(), user);
       commentEntity.setProperty(CommentEntity.TIME_PROPERTY.getLabel(), time);
       commentEntity.setProperty(CommentEntity.MOOD_PROPERTY.getLabel(), mood);

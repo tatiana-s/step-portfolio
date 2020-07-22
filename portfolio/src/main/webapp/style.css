@@ -70,11 +70,8 @@ input[type=submit] {
   text-align: center;
 }
 
-#comment-section {
-  display: none;
-}
-
 #comment-form {
+  display: none;
   margin-bottom: 25px;
 }
 
