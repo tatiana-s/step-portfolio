@@ -14,7 +14,12 @@
 
 /* eslint-disable no-unused-vars */
 
+/** Current slide index in photo gallery. */
 let slideIndex = 0;
+
+/** Current filter settings in comment section. */
+let commentLimit = 4;
+let sortOrder = 'new';
 
 /**
  * Helper function for naviagtion via arrows.
@@ -49,10 +54,29 @@ function showSlides(newIndex) {
   dots[slideIndex].className += ' active';
 }
 
+/** Called when website is loaded. */
+function init() {
+  showComments();
+}
+
+/** Called when comment number limit selector changes: changes limit. */
+function changeLimit() {
+  commentLimit = document.getElementById('select-comment-number').value;
+  showComments();
+}
+
+/** Called when sorting order selector changes: changes sorting order. */
+function changeSort() {
+  sortOrder = document.getElementById('select-comment-sort').value;
+  showComments();
+}
+
 /** Displays list of comments returned by the server.*/
 function showComments() {
-  const limit = document.getElementById('select-comment-number').value;
-  fetch('/comments?number=' + limit)
+  const url = new URL(window.location.origin + '/comments');
+  const params = {limit: commentLimit, sort: sortOrder};
+  url.search = new URLSearchParams(params).toString();
+  fetch(url)
       .then((response) => response.json()).then((comments) => {
         const commentsList = document.getElementById('text-container');
         commentsList.innerHTML = '';
@@ -64,19 +88,47 @@ function showComments() {
 
 /**
  * Creates an <p> comment element containing text.
- * @param {string} text The comment content.
+ * @param {Object} comment The comment object.
  * @return {HTMLElement} The html element.
  */
-function createCommentElement(text) {
-  const element = document.createElement('p');
-  element.innerText = text;
+function createCommentElement(comment) {
+  const element = document.createElement('div');
   element.className = 'comment';
+  const username = document.createElement('span');
+  username.innerText = comment.user;
+  username.className = 'comment-username';
+  const mood = document.createElement('span');
+  mood.innerText = comment.mood;
+  mood.className = 'comment-mood';
+  const content = document.createElement('p');
+  content.innerText = comment.content;
+  content.className = 'comment-content';
+
+  const deleteButton = document.createElement('button');
+  deleteButton.className = 'delete-button';
+  deleteButton.innerText = 'Delete';
+  deleteButton.addEventListener('click', () => {
+    element.remove();
+    deleteComment(comment);
+  });
+
+  element.appendChild(mood);
+  element.appendChild(username);
+  element.appendChild(deleteButton);
+  element.appendChild(content);
   return element;
 }
 
-/** Deletes all comments on by the server. */
-function deleteComments() {
-  fetch('/delete-comments', {
+/**
+ * Deletes all comments on by the server.
+ * @param {Object} comment The comment object.
+ */
+async function deleteComment(comment) {
+  const params = new URLSearchParams();
+  params.append('id', comment.id);
+  await fetch('/delete-comments', {
     method: 'POST',
-  }).then(showComments());
+    body: params,
+  });
+  showComments();
 }
