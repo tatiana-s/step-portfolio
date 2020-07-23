@@ -62,9 +62,10 @@ function init() {
 
 /**
  * Returns login status including current email adress and login/logout link.
- * @return {Object} The status object.
+ * Asynchronous function so await should be used when calling it.
+ * @return {Promise} The a resolved promise containing the status object.
  */
-function getLoginStatus() {
+function fetchLoginStatus() {
   const status = fetch('/user')
       .then((response) => response.json()).then((status) => {
         return status;
@@ -77,7 +78,7 @@ function getLoginStatus() {
  * and if the user is authenticated the comment form.
  */
 async function showCommentForm() {
-  const status = await getLoginStatus();
+  const status = await fetchLoginStatus();
   const message = document.getElementById('login-message');
   message.innerHTML = '';
   message.append(createLoginMessage(status));
@@ -130,7 +131,7 @@ async function showComments() {
   fetch(url)
       .then((response) => response.json()).then(async (comments) => {
         const commentsList = document.getElementById('text-container');
-        const status = await getLoginStatus();
+        const status = await fetchLoginStatus();
         const currEmail = status.userEmail;
         commentsList.innerHTML = '';
         for (let i = 0; i < comments.length; i++) {
