@@ -27,7 +27,8 @@ body {
   grid-template-rows: auto;
   grid-template-areas:
     "image1 content1"
-    "image2 content2";
+    "image2 content2"
+    "image3 content3";
 }
 
 #image1 {
@@ -47,6 +48,16 @@ body {
 
 #content2 {
   grid-area: content2;
+  margin: 25px;
+}
+
+#image3 {
+  grid-area: image3;
+  margin-bottom: 50px;
+}
+
+#content3 {
+  grid-area: content3;
   margin: 25px;
 }
 
