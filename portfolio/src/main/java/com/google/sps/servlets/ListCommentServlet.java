@@ -36,7 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet for handling comments data */
 @WebServlet("/comments")
 public class ListCommentServlet extends HttpServlet {
-  
+
   private static final String COMMENT_NUMBER_QUERY_PARAM = "limit";
   private static final String SORT_ORDER_QUERY_PARAM = "sort";
 
@@ -74,11 +74,10 @@ public class ListCommentServlet extends HttpServlet {
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(convertToJson(comments));
   }
-  
+
   /** Converts a list of comments into a JSON string using the Gson library. */
   private static String convertToJson(List<Comment> commentList) {
     Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     return gson.toJson(commentList);
   }
-
 }

@@ -17,7 +17,6 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.sps.data.Comment;
 import com.google.sps.data.CommentEntity;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
@@ -68,5 +67,4 @@ public class AddCommentServlet extends HttpServlet {
     }
     return value;
   }
-
 }
