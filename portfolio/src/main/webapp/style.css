@@ -273,3 +273,10 @@ hr { border: 1px solid yellowgreen; }
     opacity: 1;
   }
 }
+
+/** charts */
+
+.chart {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}

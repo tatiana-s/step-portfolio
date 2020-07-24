@@ -207,3 +207,51 @@ async function addComment() {
   form.reset();
   showComments();
 }
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(displayGeneralCommentChart);
+google.charts.setOnLoadCallback(displayMoodCommentChart);
+
+function displayGeneralCommentChart() {
+   fetch('/analyse-comments')
+      .then((response) => response.json()).then((data) => {
+        const generalData = new google.visualization.arrayToDataTable([
+          ['Username', 'Number of Comments'],
+          ['Anonymous', data['anonymous']],
+          ['Custom', data['comments'] - data['anonymous']]
+        ]);
+        const generalOptions = {
+          title: 'Number of Comments by Username',
+              'width':500,
+              'height':300
+        };
+        const generalChart = new google.visualization.PieChart(document.getElementById('comment-piechart'));
+        generalChart.draw(generalData, generalOptions);
+      });
+}
+
+function displayMoodCommentChart() {
+   fetch('/analyse-comments')
+      .then((response) => response.json()).then((data) => {
+          const moodData = new google.visualization.arrayToDataTable([
+            ['Mood', 'Number of Comments'],
+            ['😀', data['😀']],
+            ['🤔', data['🤔']],
+            ['🤠', data['🤠']],
+            ['☹️', data['☹️']],
+            ['👽', data['👽']],
+          ]);
+          const moodOptions = {
+            title: 'Number of Comments by Mood',
+              'width':500,
+              'height':300
+          };
+        const moodChart = new google.visualization.PieChart(document.getElementById('mood-piechart'));
+        moodChart.draw(moodData, moodOptions);
+      });
+}
+
+
+
+
+
