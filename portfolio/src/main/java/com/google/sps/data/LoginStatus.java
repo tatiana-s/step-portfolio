@@ -14,23 +14,16 @@
 
 package com.google.sps.data;
 
-/** Specifies the kind and property names to use for comment entities in the datastore database. */
-public enum CommentEntity {
-  KIND("Comment"),
-  CONTENT_PROPERTY("content"),
-  EMAIL_PROPERTY("email"),
-  USERNAME_PROPERTY("user"),
-  TIME_PROPERTY("time"),
-  MOOD_PROPERTY("mood");
+/** A helper class for passing login data. */
+public final class LoginStatus {
 
-  /* Labels comments and properties of comments in the database. */
-  private final String label;
+  private final boolean loggedIn;
+  private final String userEmail;
+  private final String link;
 
-  private CommentEntity(String label) {
-    this.label = label;
-  }
-
-  public String getLabel() {
-    return label;
+  public LoginStatus(boolean loggedIn, String userEmail, String link) {
+    this.loggedIn = loggedIn;
+    this.userEmail = userEmail;
+    this.link = link;
   }
 }

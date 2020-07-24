@@ -71,6 +71,7 @@ input[type=submit] {
 }
 
 #comment-form {
+  display: none;
   margin-bottom: 25px;
 }
 

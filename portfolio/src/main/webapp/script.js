@@ -56,7 +56,59 @@ function showSlides(newIndex) {
 
 /** Called when website is loaded. */
 function init() {
+  showCommentForm();
   showComments();
+}
+
+/**
+ * Returns login status including current email adress and login/logout link.
+ * Asynchronous function so await should be used when calling it.
+ * @return {Promise} The a resolved promise containing the status object.
+ */
+function fetchLoginStatus() {
+  const status = fetch('/user')
+      .then((response) => response.json()).then((status) => {
+        return status;
+      });
+  return status;
+}
+
+/**
+ * Displays a login status message
+ * and if the user is authenticated the comment form.
+ */
+async function showCommentForm() {
+  const status = await fetchLoginStatus();
+  const message = document.getElementById('login-message');
+  message.innerHTML = '';
+  message.append(createLoginMessage(status));
+  document.getElementById('email-input').value = status.userEmail;
+  if (status.loggedIn) {
+    document.getElementById('comments-form').style.display = 'block';
+  } else {
+    document.getElementById('comments-form').style.display = 'none';
+  }
+}
+
+/**
+ * Depending on whether user is authenticated or not
+ * displays either a login or logout link.
+ * @param {Object} status The status object.
+ * @return {HTMLElement} The resulting html element.
+ */
+function createLoginMessage(status) {
+  const element = document.createElement('span');
+  if (status.loggedIn) {
+    element.innerText = 'You are currently logged in as ' + status.userEmail +
+      ', log out ';
+  } else {
+    element.innerText = 'You need to log in to leave comments, log in ';
+  }
+  const link = document.createElement('a');
+  link.href = status.link;
+  link.innerHTML = 'here.';
+  element.append(link);
+  return element;
 }
 
 /** Called when comment number limit selector changes: changes limit. */
@@ -71,17 +123,20 @@ function changeSort() {
   showComments();
 }
 
-/** Displays list of comments returned by the server.*/
-function showComments() {
+/** Displays list of comments returned by the server if user is logged in.*/
+async function showComments() {
   const url = new URL(window.location.origin + '/comments');
   const params = {limit: commentLimit, sort: sortOrder};
   url.search = new URLSearchParams(params).toString();
   fetch(url)
-      .then((response) => response.json()).then((comments) => {
+      .then((response) => response.json()).then(async (comments) => {
         const commentsList = document.getElementById('text-container');
+        const status = await fetchLoginStatus();
+        const currEmail = status.userEmail;
         commentsList.innerHTML = '';
         for (let i = 0; i < comments.length; i++) {
-          commentsList.appendChild(createCommentElement(comments[i]));
+          const commentElement = createCommentElement(comments[i], currEmail);
+          commentsList.appendChild(commentElement);
         }
       });
 }
@@ -89,13 +144,14 @@ function showComments() {
 /**
  * Creates an <p> comment element containing text.
  * @param {Object} comment The comment object.
+ * @param {Object} currentEmail The current user email.
  * @return {HTMLElement} The html element.
  */
-function createCommentElement(comment) {
+function createCommentElement(comment, currentEmail) {
   const element = document.createElement('div');
   element.className = 'comment';
   const username = document.createElement('span');
-  username.innerText = comment.user;
+  username.innerText = comment.username;
   username.className = 'comment-username';
   const mood = document.createElement('span');
   mood.innerText = comment.mood;
@@ -104,17 +160,20 @@ function createCommentElement(comment) {
   content.innerText = comment.content;
   content.className = 'comment-content';
 
-  const deleteButton = document.createElement('button');
-  deleteButton.className = 'delete-button';
-  deleteButton.innerText = 'Delete';
-  deleteButton.addEventListener('click', () => {
-    element.remove();
-    deleteComment(comment);
-  });
-
   element.appendChild(mood);
   element.appendChild(username);
-  element.appendChild(deleteButton);
+
+  if (currentEmail === comment.email) {
+    const deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-button';
+    deleteButton.innerText = 'Delete';
+    deleteButton.addEventListener('click', () => {
+      element.remove();
+      deleteComment(comment);
+    });
+    element.appendChild(deleteButton);
+  }
+
   element.appendChild(content);
   return element;
 }

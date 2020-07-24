@@ -19,14 +19,16 @@ public final class Comment {
 
   private final long id;
   private final String content;
-  private final String user;
+  private final String email;
+  private final String username;
   private final long time;
   private final String mood;
 
-  public Comment(long id, String content, String user, long time, String mood) {
+  public Comment(long id, String content, String email, String username, long time, String mood) {
     this.id = id;
     this.content = content;
-    this.user = user;
+    this.email = email;
+    this.username = username;
     this.time = time;
     this.mood = mood;
   }
