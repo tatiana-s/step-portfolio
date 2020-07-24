@@ -35,17 +35,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet for handling comments data */
 @WebServlet("/comments")
-public class CommentServlet extends HttpServlet {
-
-  private static final String COMMENT_FORM_NAME = "comment-input";
-  private static final String EMAIL_FORM_NAME = "email-input";
-  private static final String USER_FORM_NAME = "username-input";
-  private static final String MOOD_FORM_NAME = "select-mood";
-  private static final String REDIRECT_URL = "/index.html";
+public class ListCommentServlet extends HttpServlet {
+  
   private static final String COMMENT_NUMBER_QUERY_PARAM = "limit";
   private static final String SORT_ORDER_QUERY_PARAM = "sort";
-  private static final String DEFAULT_USERNAME = "Anonymous";
-  private static final int MAX_COMMENT_LENGHT = 500;
 
   /** Loads and returns comments from the datastore database. */
   @Override
@@ -81,42 +74,11 @@ public class CommentServlet extends HttpServlet {
     response.setCharacterEncoding("UTF-8");
     response.getWriter().println(convertToJson(comments));
   }
-
-  /** Saves comments entered in the comment form in the datastore database. */
-  @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String comment = getParameter(request, COMMENT_FORM_NAME, "");
-    String email = getParameter(request, EMAIL_FORM_NAME, "");
-    String user = getParameter(request, USER_FORM_NAME, DEFAULT_USERNAME);
-    String mood = getParameter(request, MOOD_FORM_NAME, "");
-    long time = System.currentTimeMillis();
-
-    if (!comment.isEmpty() && !(comment.length() > MAX_COMMENT_LENGHT) && !email.isEmpty()) {
-      Entity commentEntity = new Entity(CommentEntity.KIND.getLabel());
-      commentEntity.setProperty(CommentEntity.CONTENT_PROPERTY.getLabel(), comment);
-      commentEntity.setProperty(CommentEntity.EMAIL_PROPERTY.getLabel(), email);
-      commentEntity.setProperty(CommentEntity.USERNAME_PROPERTY.getLabel(), user);
-      commentEntity.setProperty(CommentEntity.TIME_PROPERTY.getLabel(), time);
-      commentEntity.setProperty(CommentEntity.MOOD_PROPERTY.getLabel(), mood);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(commentEntity);
-    }
-
-    response.sendRedirect(REDIRECT_URL);
-  }
-
+  
   /** Converts a list of comments into a JSON string using the Gson library. */
   private static String convertToJson(List<Comment> commentList) {
     Gson gson = new GsonBuilder().disableHtmlEscaping().create();
     return gson.toJson(commentList);
   }
 
-  /** Checks if the request parameter is specified in the client and returns default if not. */
-  private static String getParameter(HttpServletRequest request, String name, String defaultValue) {
-    String value = request.getParameter(name);
-    if (value == null || value.isEmpty()) {
-      return defaultValue;
-    }
-    return value;
-  }
 }
