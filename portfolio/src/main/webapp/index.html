@@ -29,10 +29,10 @@
       <div class="comments">
         <h2>Comments</h2>
         <div id="login-message"></div>
-        <form id="comments-form">
+        <form id="comments-form" onsubmit="addComment(); return false">
           <input type=hidden name="email-input" id="email-input"/>
           <p>Enter your comment here:</p>
-          <textarea name="comment-input" id="comment-input"></textarea>
+          <textarea name="comment-input" id="comment-input" required></textarea>
           <br></br>
           <label for="username-input">Username: </label>
           <input type=text name="username-input" id="username-input"/>
@@ -45,7 +45,7 @@
             <option value="👽">👽</option>
           </select>
           <br></br>
-          <input type="button" value="Submit" onclick="addComment()"/>
+          <input type="submit"/>
         </form>
         <hr>
         <div id="text-container"></div>

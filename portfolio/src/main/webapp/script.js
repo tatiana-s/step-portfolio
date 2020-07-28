@@ -192,7 +192,7 @@ async function deleteComment(comment) {
   showComments();
 }
 
-/** Adds a comment when the commetn form is submitted. */
+/** Adds a comment when the comment form is submitted. */
 async function addComment() {
   const form = document.getElementById('comments-form');
   const params = new URLSearchParams();
