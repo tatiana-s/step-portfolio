@@ -47,11 +47,11 @@ public class ListCommentServlet extends HttpServlet {
     String sortOrder = request.getParameter(SORT_ORDER_QUERY_PARAM);
     switch (sortOrder) {
       case "old":
-        query.addSort("time", SortDirection.ASCENDING);
+        query.addSort(CommentEntity.TIME_PROPERTY.getLabel(), SortDirection.ASCENDING);
         break;
       case "new":
       default:
-        query.addSort("time", SortDirection.DESCENDING);
+        query.addSort(CommentEntity.TIME_PROPERTY.getLabel(), SortDirection.DESCENDING);
     }
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -72,12 +72,7 @@ public class ListCommentServlet extends HttpServlet {
 
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter().println(convertToJson(comments));
-  }
-
-  /** Converts a list of comments into a JSON string using the Gson library. */
-  private static String convertToJson(List<Comment> commentList) {
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-    return gson.toJson(commentList);
+    Gson gson = new Gson();
+    response.getWriter().println(gson.toJson(comments));
   }
 }

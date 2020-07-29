@@ -20,7 +20,6 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.sps.data.CommentEntity;
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,36 +32,38 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/comment-stats")
 public class CommentStatsServlet extends HttpServlet {
 
+  private static final String COMMENT_COUNT_DATA_LABEL = "commentCount";
+  private static final String MOOD_COUNT_DATA_LABEL = "moodCount";
+  private static final String DEFAULT_USER = "Anonymous";
+
   /** Loads comments from the datastore database and accumulates some data about them. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Query query = new Query(CommentEntity.KIND.getLabel());
+    HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
+    data.put(COMMENT_COUNT_DATA_LABEL, new HashMap<>());
+    data.put(MOOD_COUNT_DATA_LABEL, new HashMap<>());
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query(CommentEntity.KIND.getLabel());
     PreparedQuery results = datastore.prepare(query);
 
-    HashMap<String, Integer> data = new HashMap<>();
     int numberOfComments = 0;
     int numberOfAnonymousComments = 0;
     for (Entity entity : results.asIterable()) {
       numberOfComments++;
       String username = (String) entity.getProperty(CommentEntity.USERNAME_PROPERTY.getLabel());
-      if (username.equals("Anonymous")) {
+      if (username.equals(DEFAULT_USER)) {
         numberOfAnonymousComments++;
       }
       String mood = (String) entity.getProperty(CommentEntity.MOOD_PROPERTY.getLabel());
-      data.put(mood, data.getOrDefault(mood, 0) + 1);
+      data.get(MOOD_COUNT_DATA_LABEL).put(mood, data.get(MOOD_COUNT_DATA_LABEL).getOrDefault(mood, 0) + 1);
     }
-    data.put("comments", numberOfComments);
-    data.put("anonymous", numberOfAnonymousComments);
+    data.get(COMMENT_COUNT_DATA_LABEL).put("total", numberOfComments);
+    data.get(COMMENT_COUNT_DATA_LABEL).put("anonymousTotal", numberOfAnonymousComments);
 
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
-    response.getWriter().println(convertToJson(data));
-  }
-
-  /** Converts a list of comments into a JSON string using the Gson library. */
-  private static String convertToJson(HashMap<String, Integer> data) {
-    Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-    return gson.toJson(data);
+    Gson gson = new Gson();
+    response.getWriter().println(gson.toJson(data));
   }
 }

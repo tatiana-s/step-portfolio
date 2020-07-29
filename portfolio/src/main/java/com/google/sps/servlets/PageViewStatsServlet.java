@@ -24,31 +24,49 @@ import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.sps.data.ViewsEntity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.sps.data.CommentEntity;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashMap;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet for incrementing page views every time the page is loaded. */
-@WebServlet("/add-page-view")
-public class AddPageViewServlet extends HttpServlet {
+/** Servlet for accumulating page view data */
+@WebServlet("/page-view-stats")
+public class PageViewStatsServlet extends HttpServlet {
 
-  private static final String REDIRECT_URL = "/index.html";
-
-  /** Stores page view count in views entity for current day. */
+  /** Loads views from the datastore database and returns data from the last week. */
   @Override
-  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     Date date = new Date();
-    LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-    int year = localDate.getYear();
-    int month = localDate.getMonthValue();
-    int day = localDate.getDayOfMonth();
-    long lastUpdated = System.currentTimeMillis();
+    LocalDate currentDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+    LinkedHashMap<String, Long> views = new LinkedHashMap<>();
+    currentDate = currentDate.minusDays(6);
+    for (int i = 0; i < 7; i++) {
+      views.put(currentDate.getDayOfMonth() + "/" + currentDate.getMonthValue(), getCount(currentDate));
+      currentDate = currentDate.plusDays(1);
+    }
+
+    response.setContentType("application/json;");
+    response.setCharacterEncoding("UTF-8");
+    Gson gson = new Gson();
+    response.getWriter().println(gson.toJson(views));
+  }
+
+
+  /** Returns number of page views on given date. */
+  private long getCount(LocalDate date) {
+    int year = date.getYear();
+    int month = date.getMonthValue();
+    int day = date.getDayOfMonth();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(ViewsEntity.KIND.getLabel());
@@ -56,21 +74,12 @@ public class AddPageViewServlet extends HttpServlet {
         new FilterPredicate(ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
         new FilterPredicate(ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
         new FilterPredicate(ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
+
     Entity viewsEntity = datastore.prepare(query).asSingleEntity();
-
     if (viewsEntity == null) {
-      viewsEntity = new Entity(ViewsEntity.KIND.getLabel());
-      viewsEntity.setProperty(ViewsEntity.YEAR_PROPERTY.getLabel(), year);
-      viewsEntity.setProperty(ViewsEntity.MONTH_PROPERTY.getLabel(), month);
-      viewsEntity.setProperty(ViewsEntity.DAY_PROPERTY.getLabel(), day);
-      viewsEntity.setProperty(ViewsEntity.COUNT_PROPERTY.getLabel(), 1);
+      return 0;
     } else {
-      long count = (long) (viewsEntity.getProperty(ViewsEntity.COUNT_PROPERTY.getLabel()));
-      viewsEntity.setProperty(ViewsEntity.COUNT_PROPERTY.getLabel(), count + 1);
+      return (long) (viewsEntity.getProperty(ViewsEntity.COUNT_PROPERTY.getLabel()));
     }
-    viewsEntity.setProperty(ViewsEntity.UPDATED_PROPERTY.getLabel(), lastUpdated);
-    datastore.put(viewsEntity);
-
-    response.sendRedirect(REDIRECT_URL);
   }
 }
