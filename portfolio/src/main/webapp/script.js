@@ -58,6 +58,7 @@ function showSlides(newIndex) {
 function init() {
   showCommentForm();
   showComments();
+  updatePageViews();
 }
 
 /**
@@ -185,7 +186,7 @@ function createCommentElement(comment, currentEmail) {
 async function deleteComment(comment) {
   const params = new URLSearchParams();
   params.append('id', comment.id);
-  await fetch('/delete-comments', {
+  await fetch('/delete-comment', {
     method: 'POST',
     body: params,
   });
@@ -206,6 +207,12 @@ async function addComment() {
   });
   form.reset();
   showComments();
+}
+
+function updatePageViews() {
+  fetch('/add-page-view', {
+    method: 'POST',
+  });
 }
 
 google.charts.load('current', {'packages':['corechart']});
@@ -250,31 +257,3 @@ function displayMoodCommentChart() {
         moodChart.draw(moodData, moodOptions);
       });
 }
-
-google.charts.load('current', {
-        'packages':['geochart'],
-      });
-google.charts.setOnLoadCallback(drawRegionsMap);
-
-function drawRegionsMap() {
-  var data = google.visualization.arrayToDataTable([
-          ['Country', 'Popularity'],
-          ['Germany', 200],
-          ['United States', 300],
-          ['Brazil', 400],
-          ['Canada', 500],
-          ['France', 600],
-          ['RU', 700]
-        ]);
-
-  var options = {};
-
-  var chart = new google.visualization.GeoChart(document.getElementById('regions-div'));
-
-  chart.draw(data, options);
-}
-
-
-
-
-

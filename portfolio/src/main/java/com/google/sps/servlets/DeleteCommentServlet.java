@@ -26,7 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet for deleting comments. */
-@WebServlet("/delete-comments")
+@WebServlet("/delete-comment")
 public class DeleteCommentServlet extends HttpServlet {
 
   private static final String REDIRECT_URL = "/index.html";

@@ -30,8 +30,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet for accumulating comments data */
-@WebServlet("/analyse-comments")
-public class AnalyseCommentServlet extends HttpServlet {
+@WebServlet("/comment-stats")
+public class CommentStatsServlet extends HttpServlet {
 
   /** Loads comments from the datastore database and accumulates some data about them. */
   @Override
