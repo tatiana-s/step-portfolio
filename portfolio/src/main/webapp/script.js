@@ -14,64 +14,15 @@
 
 /* eslint-disable no-unused-vars */
 
-/** Current slide index in photo gallery. */
-let slideIndex = 0;
-
 /** Current filter settings in comment section. */
 let commentLimit = 4;
 let sortOrder = 'new';
-
-/**
- * Helper function for naviagtion via arrows.
- * @param {number} offset The number of slides to change by
- * (negative numbers indicate going backwards).
- */
-function changeSlides(offset) {
-  showSlides(slideIndex + offset);
-}
-
-/**
- * Displays photo at new index by changing its display style
- * and setting the corresponding indicator.
- * @param {number} newIndex Index of photo to be displayed.
- */
-function showSlides(newIndex) {
-  const slides = document.getElementsByClassName('slide');
-  const dots = document.getElementsByClassName('dot');
-  // Hide the previous photo and indicator.
-  slides[slideIndex].style.display = 'none';
-  dots[slideIndex].className = dots[slideIndex].className.replace('active', '');
-  // Handle edge cases and set the new slide index.
-  if (newIndex > slides.length - 1) {
-    slideIndex = 0;
-  } else if (newIndex < 0) {
-    slideIndex = slides.length - 1;
-  } else {
-    slideIndex = newIndex;
-  }
-  // Display the photo.
-  slides[slideIndex].style.display = 'block';
-  dots[slideIndex].className += ' active';
-}
 
 /** Called when website is loaded. */
 function init() {
   showCommentForm();
   showComments();
   updatePageViews();
-}
-
-/**
- * Returns login status including current email adress and login/logout link.
- * Asynchronous function so await should be used when calling it.
- * @return {Promise} The a resolved promise containing the status object.
- */
-function fetchLoginStatus() {
-  const status = fetch('/user')
-      .then((response) => response.json()).then((status) => {
-        return status;
-      });
-  return status;
 }
 
 /**
@@ -89,6 +40,19 @@ async function showCommentForm() {
   } else {
     document.getElementById('comments-form').style.display = 'none';
   }
+}
+
+/**
+ * Returns login status including current email adress and login/logout link.
+ * Asynchronous function so await should be used when calling it.
+ * @return {Promise} The a resolved promise containing the status object.
+ */
+function fetchLoginStatus() {
+  const status = fetch('/user')
+      .then((response) => response.json()).then((status) => {
+        return status;
+      });
+  return status;
 }
 
 /**
@@ -209,51 +173,9 @@ async function addComment() {
   showComments();
 }
 
+/** Increments daily page view count. */
 function updatePageViews() {
   fetch('/add-page-view', {
     method: 'POST',
   });
-}
-
-google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(displayGeneralCommentChart);
-google.charts.setOnLoadCallback(displayMoodCommentChart);
-
-function displayGeneralCommentChart() {
-   fetch('/analyse-comments')
-      .then((response) => response.json()).then((data) => {
-        const generalData = new google.visualization.arrayToDataTable([
-          ['Username', 'Number of Comments'],
-          ['Anonymous', data['anonymous']],
-          ['Custom', data['comments'] - data['anonymous']]
-        ]);
-        const generalOptions = {
-          title: 'Number of Comments by Username',
-              'width':500,
-              'height':300
-        };
-        const generalChart = new google.visualization.PieChart(document.getElementById('comment-piechart'));
-        generalChart.draw(generalData, generalOptions);
-      });
-}
-
-function displayMoodCommentChart() {
-   fetch('/analyse-comments')
-      .then((response) => response.json()).then((data) => {
-          const moodData = new google.visualization.arrayToDataTable([
-            ['Mood', 'Number of Comments'],
-            ['😀', data['😀']],
-            ['🤔', data['🤔']],
-            ['🤠', data['🤠']],
-            ['☹️', data['☹️']],
-            ['👽', data['👽']],
-          ]);
-          const moodOptions = {
-            title: 'Number of Comments by Mood',
-              'width':500,
-              'height':300
-          };
-        const moodChart = new google.visualization.PieChart(document.getElementById('mood-piechart'));
-        moodChart.draw(moodData, moodOptions);
-      });
 }
