@@ -49,7 +49,7 @@ public class PageViewStatsServlet extends HttpServlet {
     currentDate = currentDate.minusDays(6);
     for (int i = 0; i < 7; i++) {
       views.put(
-        currentDate.getDayOfMonth() + "/" + currentDate.getMonthValue(), getCount(currentDate));
+          currentDate.getDayOfMonth() + "/" + currentDate.getMonthValue(), getCount(currentDate));
       currentDate = currentDate.plusDays(1);
     }
 
@@ -58,7 +58,6 @@ public class PageViewStatsServlet extends HttpServlet {
     Gson gson = new Gson();
     response.getWriter().println(gson.toJson(views));
   }
-
 
   /** Returns number of page views on given date. */
   private long getCount(LocalDate date) {
@@ -69,14 +68,15 @@ public class PageViewStatsServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(ViewsEntity.KIND.getLabel());
     query.setFilter(
-      new CompositeFilter(CompositeFilterOperator.AND,
-        Arrays.asList(
-          new FilterPredicate(
-            ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
-          new FilterPredicate(
-            ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
-          new FilterPredicate(
-            ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
+        new CompositeFilter(
+            CompositeFilterOperator.AND,
+            Arrays.asList(
+                new FilterPredicate(
+                    ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year),
+                new FilterPredicate(
+                    ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
+                new FilterPredicate(
+                    ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
 
     Entity viewsEntity = datastore.prepare(query).asSingleEntity();
     if (viewsEntity == null) {

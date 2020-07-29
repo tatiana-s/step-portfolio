@@ -52,15 +52,15 @@ public class AddPageViewServlet extends HttpServlet {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(ViewsEntity.KIND.getLabel());
     query.setFilter(
-      new CompositeFilter(
-        CompositeFilterOperator.AND,
-        Arrays.asList(
-          new FilterPredicate(
-            ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
-          new FilterPredicate(
-            ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
-          new FilterPredicate(
-            ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
+        new CompositeFilter(
+            CompositeFilterOperator.AND,
+            Arrays.asList(
+                new FilterPredicate(
+                    ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year),
+                new FilterPredicate(
+                    ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
+                new FilterPredicate(
+                    ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
     Entity viewsEntity = datastore.prepare(query).asSingleEntity();
 
     if (viewsEntity == null) {

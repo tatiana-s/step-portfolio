@@ -14,10 +14,10 @@
 
 package com.google.sps.data;
 
-/** 
-* Specifies the kind and property names to use for views entities (entities that store page views
-* per day) in the datastore database. 
-*/
+/**
+ * Specifies the kind and property names to use for views entities (entities that store page views
+ * per day) in the datastore database.
+ */
 public enum ViewsEntity {
   KIND("Views"),
   YEAR_PROPERTY("year"),
