@@ -17,16 +17,13 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
-import com.google.sps.data.ViewsEntity;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.sps.data.CommentEntity;
+import com.google.sps.data.ViewsEntity;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -51,7 +48,8 @@ public class PageViewStatsServlet extends HttpServlet {
     LinkedHashMap<String, Long> views = new LinkedHashMap<>();
     currentDate = currentDate.minusDays(6);
     for (int i = 0; i < 7; i++) {
-      views.put(currentDate.getDayOfMonth() + "/" + currentDate.getMonthValue(), getCount(currentDate));
+      views.put(
+        currentDate.getDayOfMonth() + "/" + currentDate.getMonthValue(), getCount(currentDate));
       currentDate = currentDate.plusDays(1);
     }
 
@@ -70,10 +68,15 @@ public class PageViewStatsServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(ViewsEntity.KIND.getLabel());
-    query.setFilter(new CompositeFilter(CompositeFilterOperator.AND, Arrays.asList(
-        new FilterPredicate(ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
-        new FilterPredicate(ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
-        new FilterPredicate(ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
+    query.setFilter(
+      new CompositeFilter(CompositeFilterOperator.AND,
+        Arrays.asList(
+          new FilterPredicate(
+            ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
+          new FilterPredicate(
+            ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
+          new FilterPredicate(
+            ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
 
     Entity viewsEntity = datastore.prepare(query).asSingleEntity();
     if (viewsEntity == null) {

@@ -17,18 +17,17 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
-import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.CompositeFilter;
 import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
-import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.appengine.api.datastore.Query.FilterOperator;
+import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.sps.data.ViewsEntity;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.Date;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -52,10 +51,16 @@ public class AddPageViewServlet extends HttpServlet {
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(ViewsEntity.KIND.getLabel());
-    query.setFilter(new CompositeFilter(CompositeFilterOperator.AND, Arrays.asList(
-        new FilterPredicate(ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
-        new FilterPredicate(ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
-        new FilterPredicate(ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
+    query.setFilter(
+      new CompositeFilter(
+        CompositeFilterOperator.AND,
+        Arrays.asList(
+          new FilterPredicate(
+            ViewsEntity.YEAR_PROPERTY.getLabel(), FilterOperator.EQUAL, year), 
+          new FilterPredicate(
+            ViewsEntity.MONTH_PROPERTY.getLabel(), FilterOperator.EQUAL, month),
+          new FilterPredicate(
+            ViewsEntity.DAY_PROPERTY.getLabel(), FilterOperator.EQUAL, day))));
     Entity viewsEntity = datastore.prepare(query).asSingleEntity();
 
     if (viewsEntity == null) {

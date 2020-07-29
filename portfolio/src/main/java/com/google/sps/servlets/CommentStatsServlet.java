@@ -56,7 +56,8 @@ public class CommentStatsServlet extends HttpServlet {
         numberOfAnonymousComments++;
       }
       String mood = (String) entity.getProperty(CommentEntity.MOOD_PROPERTY.getLabel());
-      data.get(MOOD_COUNT_DATA_LABEL).put(mood, data.get(MOOD_COUNT_DATA_LABEL).getOrDefault(mood, 0) + 1);
+      data.get(MOOD_COUNT_DATA_LABEL)
+        .put(mood, data.get(MOOD_COUNT_DATA_LABEL).getOrDefault(mood, 0) + 1);
     }
     data.get(COMMENT_COUNT_DATA_LABEL).put("total", numberOfComments);
     data.get(COMMENT_COUNT_DATA_LABEL).put("anonymousTotal", numberOfAnonymousComments);
