@@ -21,6 +21,7 @@ import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.gson.Gson;
 import com.google.sps.data.CommentEntity;
+import com.google.sps.data.Constants;
 import java.io.IOException;
 import java.util.HashMap;
 import javax.servlet.annotation.WebServlet;
@@ -34,7 +35,6 @@ public class CommentStatsServlet extends HttpServlet {
 
   private static final String COMMENT_COUNT_DATA_LABEL = "commentCount";
   private static final String MOOD_COUNT_DATA_LABEL = "moodCount";
-  private static final String DEFAULT_USER = "Anonymous";
 
   /** Loads comments from the datastore database and accumulates some data about them. */
   @Override
@@ -51,7 +51,7 @@ public class CommentStatsServlet extends HttpServlet {
     for (Entity entity : results.asIterable()) {
       numberOfComments++;
       String username = (String) entity.getProperty(CommentEntity.USERNAME_PROPERTY.getLabel());
-      if (username.equals(DEFAULT_USER)) {
+      if (username.equals(Constants.DEFAULT_USERNAME)) {
         numberOfAnonymousComments++;
       }
       String mood = (String) entity.getProperty(CommentEntity.MOOD_PROPERTY.getLabel());
