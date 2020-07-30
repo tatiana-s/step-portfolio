@@ -25,6 +25,8 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 import com.google.sps.data.ViewsEntity;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -46,11 +48,10 @@ public class PageViewStatsServlet extends HttpServlet {
     LocalDate currentDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
     LinkedHashMap<String, Long> views = new LinkedHashMap<>();
-    currentDate = currentDate.minusDays(6);
-    for (int i = 0; i < 7; i++) {
-      views.put(
-          currentDate.getDayOfMonth() + "/" + currentDate.getMonthValue(), getCount(currentDate));
-      currentDate = currentDate.plusDays(1);
+    for (int i = 6; i >= 0; i--) {
+      LocalDate dateOfInterest = currentDate.minusDays(i);
+      String formattedDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(dateOfInterest);
+      views.put(formattedDate, getCount(dateOfInterest));
     }
 
     response.setContentType("application/json;");

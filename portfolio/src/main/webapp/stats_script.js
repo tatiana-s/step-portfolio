@@ -35,7 +35,6 @@ const options = {
     minValue: 0,
     gridlines: {
       color: '#37474f',
-      count: 4,
     },
     baselineColor: 'transparent',
     textStyle: {
