@@ -43,12 +43,7 @@ public class UserServlet extends HttpServlet {
       String loginUrl = userService.createLoginURL(REDIRECT_URL);
       status = new LoginStatus(false, "", loginUrl);
     }
-    response.getWriter().println(convertToJson(status));
-  }
-
-  /** Converts a login status into a JSON string using the Gson library. */
-  private static String convertToJson(LoginStatus status) {
     Gson gson = new Gson();
-    return gson.toJson(status);
+    response.getWriter().println(gson.toJson(status));
   }
 }

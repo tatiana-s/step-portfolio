@@ -32,7 +32,6 @@ public class AddCommentServlet extends HttpServlet {
   private static final String EMAIL_FORM_NAME = "email-input";
   private static final String USER_FORM_NAME = "username-input";
   private static final String MOOD_FORM_NAME = "select-mood";
-  private static final String REDIRECT_URL = "/index.html";
   private static final String DEFAULT_USERNAME = "Anonymous";
   private static final int MAX_COMMENT_LENGHT = 500;
 
@@ -55,8 +54,6 @@ public class AddCommentServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);
     }
-
-    response.sendRedirect(REDIRECT_URL);
   }
 
   /** Checks if the request parameter is specified in the client and returns default if not. */

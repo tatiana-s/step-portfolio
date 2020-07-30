@@ -37,8 +37,6 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/add-page-view")
 public class AddPageViewServlet extends HttpServlet {
 
-  private static final String REDIRECT_URL = "/index.html";
-
   /** Stores page view count in views entity for current day. */
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -75,7 +73,5 @@ public class AddPageViewServlet extends HttpServlet {
     }
     viewsEntity.setProperty(ViewsEntity.UPDATED_PROPERTY.getLabel(), lastUpdated);
     datastore.put(viewsEntity);
-
-    response.sendRedirect(REDIRECT_URL);
   }
 }
