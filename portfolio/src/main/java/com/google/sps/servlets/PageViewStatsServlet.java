@@ -25,10 +25,10 @@ import com.google.appengine.api.datastore.Query.FilterPredicate;
 import com.google.gson.Gson;
 import com.google.sps.data.ViewsEntity;
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -50,7 +50,8 @@ public class PageViewStatsServlet extends HttpServlet {
     LinkedHashMap<String, Long> views = new LinkedHashMap<>();
     for (int i = 6; i >= 0; i--) {
       LocalDate dateOfInterest = currentDate.minusDays(i);
-      String formattedDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(dateOfInterest);
+      String formattedDate =
+          DateTimeFormatter.ofLocalizedDate(FormatStyle.SHORT).format(dateOfInterest);
       views.put(formattedDate, getCount(dateOfInterest));
     }
 
