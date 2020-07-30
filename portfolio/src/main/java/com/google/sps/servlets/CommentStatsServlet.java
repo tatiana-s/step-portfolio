@@ -39,9 +39,8 @@ public class CommentStatsServlet extends HttpServlet {
   /** Loads comments from the datastore database and accumulates some data about them. */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
-    data.put(COMMENT_COUNT_DATA_LABEL, new HashMap<>());
-    data.put(MOOD_COUNT_DATA_LABEL, new HashMap<>());
+    HashMap<String, Integer> commentCount = new HashMap<>();
+    HashMap<String, Integer> moodCount = new HashMap<>();
 
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query(CommentEntity.KIND.getLabel());
@@ -56,12 +55,14 @@ public class CommentStatsServlet extends HttpServlet {
         numberOfAnonymousComments++;
       }
       String mood = (String) entity.getProperty(CommentEntity.MOOD_PROPERTY.getLabel());
-      data.get(MOOD_COUNT_DATA_LABEL)
-          .put(mood, data.get(MOOD_COUNT_DATA_LABEL).getOrDefault(mood, 0) + 1);
+      moodCount.put(mood, moodCount.getOrDefault(mood, 0) + 1);
     }
-    data.get(COMMENT_COUNT_DATA_LABEL).put("total", numberOfComments);
-    data.get(COMMENT_COUNT_DATA_LABEL).put("anonymousTotal", numberOfAnonymousComments);
+    commentCount.put("total", numberOfComments);
+    commentCount.put("anonymousTotal", numberOfAnonymousComments);
 
+    HashMap<String, HashMap<String, Integer>> data = new HashMap<>();
+    data.put(COMMENT_COUNT_DATA_LABEL, commentCount);
+    data.put(MOOD_COUNT_DATA_LABEL, moodCount);
     response.setContentType("application/json;");
     response.setCharacterEncoding("UTF-8");
     Gson gson = new Gson();
