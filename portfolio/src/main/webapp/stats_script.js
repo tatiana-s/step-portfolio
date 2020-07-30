@@ -15,6 +15,8 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable require-jsdoc*/
 
+import moods from '/script.js';
+
 google.charts.load('current', {'packages': ['corechart']});
 google.charts.setOnLoadCallback(displayPageViewsCharts);
 google.charts.setOnLoadCallback(displayGeneralCommentChart);
@@ -79,8 +81,8 @@ function displayGeneralCommentChart() {
         const dataTable = new google.visualization.DataTable();
         dataTable.addColumn('string', 'Username' );
         dataTable.addColumn('number', 'Number of Comments');
-        anonymousTotal = data['commentCount']['anonymousTotal'];
-        total = data['commentCount']['total'] - anonymousTotal;
+        const anonymousTotal = data['commentCount']['anonymousTotal'];
+        const total = data['commentCount']['total'] - anonymousTotal;
         dataTable.addRows([
           ['Anonymous', anonymousTotal],
           ['Custom Username', total],
@@ -97,13 +99,9 @@ function displayMoodCommentChart() {
         const dataTable = new google.visualization.DataTable();
         dataTable.addColumn('string', 'Mood' );
         dataTable.addColumn('number', 'Number of Comments');
-        dataTable.addRows([
-          ['😀', data['moodCount']['😀']],
-          ['🤔', data['moodCount']['🤔']],
-          ['🤠', data['moodCount']['🤠']],
-          ['☹️', data['moodCount']['☹️']],
-          ['👽', data['moodCount']['👽']],
-        ]);
+        for (const mood of moods) {
+          dataTable.addRow([mood, data['moodCount'][mood]]);
+        }
         const chart = new google.visualization.PieChart(
             document.getElementById('mood-piechart'));
         chart.draw(dataTable, options);

@@ -22,16 +22,16 @@ let slideIndex = 0;
  * @param {number} offset The number of slides to change by
  * (negative numbers indicate going backwards).
  */
-function changeSlides(offset) {
+window.changeSlides = function changeSlides(offset) {
   showSlides(slideIndex + offset);
-}
+};
 
 /**
  * Displays photo at new index by changing its display style
  * and setting the corresponding indicator.
  * @param {number} newIndex Index of photo to be displayed.
  */
-function showSlides(newIndex) {
+window.showSlides = function showSlides(newIndex) {
   const slides = document.getElementsByClassName('slide');
   const dots = document.getElementsByClassName('dot');
   // Hide the previous photo and indicator.
@@ -48,4 +48,4 @@ function showSlides(newIndex) {
   // Display the photo.
   slides[slideIndex].style.display = 'block';
   dots[slideIndex].className += ' active';
-}
+};

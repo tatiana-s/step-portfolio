@@ -18,12 +18,16 @@
 let commentLimit = 4;
 let sortOrder = 'new';
 
+/** Moods that can be selected in the comment form. */
+const moods = ['😀', '🤔', '🤠', '☹️', '👽'];
+export default moods;
+
 /** Called when website is loaded. */
-function init() {
+window.init = function init() {
   showCommentForm();
   showComments();
   updatePageViews();
-}
+};
 
 /**
  * Displays a login status message
@@ -39,6 +43,10 @@ async function showCommentForm() {
     document.getElementById('comments-form').style.display = 'block';
   } else {
     document.getElementById('comments-form').style.display = 'none';
+  }
+  const moodForm = document.getElementById('select-mood');
+  for (let i = 0; i < moodForm.length; i++) {
+    moodForm[i].value = moods[i];
   }
 }
 
@@ -77,16 +85,16 @@ function createLoginMessage(status) {
 }
 
 /** Called when comment number limit selector changes: changes limit. */
-function changeLimit() {
+window.changeLimit = function changeLimit() {
   commentLimit = document.getElementById('select-comment-number').value;
   showComments();
-}
+};
 
 /** Called when sorting order selector changes: changes sorting order. */
-function changeSort() {
+window.changeSort = function changeSort() {
   sortOrder = document.getElementById('select-comment-sort').value;
   showComments();
-}
+};
 
 /** Displays list of comments returned by the server if user is logged in.*/
 async function showComments() {
@@ -158,7 +166,7 @@ async function deleteComment(comment) {
 }
 
 /** Adds a comment when the comment form is submitted. */
-async function addComment() {
+window.addComment = async function addComment() {
   const form = document.getElementById('comments-form');
   const params = new URLSearchParams();
   const formData = new FormData(form);
@@ -170,8 +178,9 @@ async function addComment() {
     body: params,
   });
   form.reset();
+  showCommentForm();
   showComments();
-}
+};
 
 /** Increments daily page view count. */
 function updatePageViews() {
