@@ -45,8 +45,11 @@ async function showCommentForm() {
     document.getElementById('comments-form').style.display = 'none';
   }
   const moodForm = document.getElementById('select-mood');
-  for (let i = 0; i < moodForm.length; i++) {
-    moodForm[i].value = moods[i];
+  for (let i = 0; i < moods.length; i++) {
+    const option = document.createElement('option');
+    option.appendChild(document.createTextNode(moods[i]));
+    option.value = moods[i];
+    moodForm.appendChild(option);
   }
 }
 
