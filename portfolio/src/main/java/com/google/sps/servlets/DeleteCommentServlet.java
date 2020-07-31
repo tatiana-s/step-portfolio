@@ -26,10 +26,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /** Servlet for deleting comments. */
-@WebServlet("/delete-comments")
+@WebServlet("/delete-comment")
 public class DeleteCommentServlet extends HttpServlet {
 
-  private static final String REDIRECT_URL = "/index.html";
   private static final String ID_PARAMETER = "id";
 
   /** Deletes a comment specified by the passed ID. */
@@ -39,6 +38,5 @@ public class DeleteCommentServlet extends HttpServlet {
     Key commentEntityKey = KeyFactory.createKey(CommentEntity.KIND.getLabel(), id);
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     datastore.delete(commentEntityKey);
-    response.sendRedirect(REDIRECT_URL);
   }
 }

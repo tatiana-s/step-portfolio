@@ -18,6 +18,7 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.sps.data.CommentEntity;
+import com.google.sps.data.Constants;
 import java.io.IOException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +33,6 @@ public class AddCommentServlet extends HttpServlet {
   private static final String EMAIL_FORM_NAME = "email-input";
   private static final String USER_FORM_NAME = "username-input";
   private static final String MOOD_FORM_NAME = "select-mood";
-  private static final String REDIRECT_URL = "/index.html";
-  private static final String DEFAULT_USERNAME = "Anonymous";
   private static final int MAX_COMMENT_LENGHT = 500;
 
   /** Saves comments entered in the comment form in the datastore database. */
@@ -41,7 +40,7 @@ public class AddCommentServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     String comment = getParameter(request, COMMENT_FORM_NAME, "");
     String email = getParameter(request, EMAIL_FORM_NAME, "");
-    String user = getParameter(request, USER_FORM_NAME, DEFAULT_USERNAME);
+    String user = getParameter(request, USER_FORM_NAME, Constants.DEFAULT_USERNAME);
     String mood = getParameter(request, MOOD_FORM_NAME, "");
     long time = System.currentTimeMillis();
 
@@ -55,8 +54,6 @@ public class AddCommentServlet extends HttpServlet {
       DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
       datastore.put(commentEntity);
     }
-
-    response.sendRedirect(REDIRECT_URL);
   }
 
   /** Checks if the request parameter is specified in the client and returns default if not. */
