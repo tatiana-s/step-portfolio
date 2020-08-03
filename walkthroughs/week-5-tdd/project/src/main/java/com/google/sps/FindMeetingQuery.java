@@ -14,10 +14,8 @@
 
 package com.google.sps;
 
-import java.lang.Math; 
-import java.util.Collection;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.PriorityQueue;
 
 public final class FindMeetingQuery {
@@ -27,29 +25,30 @@ public final class FindMeetingQuery {
     if (events.size() > 0) {
       initialQueueCapacity = events.size();
     }
-    PriorityQueue<TimeRange> blockingIntervalls = new PriorityQueue<>(initialQueueCapacity, TimeRange.ORDER_BY_START);
-    for(Event event: events) {
-      if (eventContainsRequestAttendee(event, attendees)) {
-        blockingIntervalls.add(event.getWhen());
+    PriorityQueue<TimeRange> blockingIntervals =
+        new PriorityQueue<>(initialQueueCapacity, TimeRange.ORDER_BY_START);
+    for (Event event : events) {
+      if (eventContainsAttendee(event, attendees)) {
+        blockingIntervals.add(event.getWhen());
       }
     }
     ArrayList<TimeRange> freeSlots = new ArrayList<>();
     long duration = request.getDuration();
     if (duration < TimeRange.WHOLE_DAY.duration()) {
-      if (!blockingIntervalls.isEmpty()) {
+      if (!blockingIntervals.isEmpty()) {
         int previousEnd = TimeRange.START_OF_DAY;
-        while(!blockingIntervalls.isEmpty()) {
-          TimeRange timeRange = blockingIntervalls.remove();
-          int intervallDifference =  previousEnd - timeRange.start();
-          if(intervallDifference < 0 && Math.abs(intervallDifference) >= duration) {
+        while (!blockingIntervals.isEmpty()) {
+          TimeRange timeRange = blockingIntervals.remove();
+          int intervalDifference = previousEnd - timeRange.start();
+          if (intervalDifference < 0 && Math.abs(intervalDifference) >= duration) {
             freeSlots.add(TimeRange.fromStartEnd(previousEnd, timeRange.start(), false));
           }
-          if(timeRange.end() > previousEnd) {
+          if (timeRange.end() > previousEnd) {
             previousEnd = timeRange.end();
           }
         }
-        int intervallDifference = previousEnd - TimeRange.END_OF_DAY;
-        if(intervallDifference < 0 && Math.abs(intervallDifference) >= duration) {
+        int intervalDifference = previousEnd - TimeRange.END_OF_DAY;
+        if (intervalDifference < 0 && Math.abs(intervalDifference) >= duration) {
           freeSlots.add(TimeRange.fromStartEnd(previousEnd, TimeRange.END_OF_DAY, true));
         }
       } else {
@@ -59,9 +58,9 @@ public final class FindMeetingQuery {
     return freeSlots;
   }
 
-  private static boolean eventContainsRequestAttendee(Event event, Collection<String> requestAttendees) {
+  private static boolean eventContainsAttendee(Event event, Collection<String> requestAttendees) {
     Collection<String> eventAttendees = event.getAttendees();
-    for(String attendee: requestAttendees) {
+    for (String attendee : requestAttendees) {
       if (eventAttendees.contains(attendee)) {
         return true;
       }
