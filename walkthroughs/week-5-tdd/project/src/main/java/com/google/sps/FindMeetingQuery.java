@@ -22,9 +22,15 @@ import java.util.PriorityQueue;
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();
+    Collection<String> optionalAttendees = request.getOptionalAttendees();
     PriorityQueue<TimeRange> blockingEvents = new PriorityQueue<>(TimeRange.ORDER_BY_START);
+    PriorityQueue<TimeRange> blockingEventsNonOptional = new PriorityQueue<>(TimeRange.ORDER_BY_START);
     for (Event event : events) {
       if (!Collections.disjoint(event.getAttendees(), attendees)) {
+        blockingEvents.add(event.getWhen());
+        blockingEventsNonOptional.add(event.getWhen());
+      }
+      if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
         blockingEvents.add(event.getWhen());
       }
     }
@@ -32,25 +38,36 @@ public final class FindMeetingQuery {
     long meetingDuration = request.getDuration();
     if (meetingDuration <= TimeRange.WHOLE_DAY.duration()) {
       if (!blockingEvents.isEmpty()) {
-        int previousEventEnd = TimeRange.START_OF_DAY;
-        while (!blockingEvents.isEmpty()) {
-          TimeRange event = blockingEvents.remove();
-          int gapDuration = event.start() - previousEventEnd;
-          if (gapDuration >= meetingDuration) {
-            freeSlots.add(TimeRange.fromStartEnd(previousEventEnd, event.start(), false));
+        findFreeSlots(blockingEvents, meetingDuration, freeSlots);
+        if(freeSlots.isEmpty()) {
+          if (!blockingEventsNonOptional.isEmpty()) {
+            findFreeSlots(blockingEventsNonOptional, meetingDuration, freeSlots);
+          } else {
+            freeSlots.add(TimeRange.WHOLE_DAY);
           }
-          if (event.end() > previousEventEnd) {
-            previousEventEnd = event.end();
-          }
-        }
-        int gapDuration = TimeRange.END_OF_DAY - previousEventEnd;
-        if (gapDuration >= meetingDuration) {
-          freeSlots.add(TimeRange.fromStartEnd(previousEventEnd, TimeRange.END_OF_DAY, true));
         }
       } else {
         freeSlots.add(TimeRange.WHOLE_DAY);
       }
     }
     return freeSlots;
+  }
+
+  private static void findFreeSlots(PriorityQueue<TimeRange> blockingEvents, long meetingDuration, Collection<TimeRange> freeSlots) {
+    int previousEventEnd = TimeRange.START_OF_DAY;
+    while (!blockingEvents.isEmpty()) {
+      TimeRange event = blockingEvents.remove();
+      int gapDuration = event.start() - previousEventEnd;
+      if (gapDuration >= meetingDuration) {
+        freeSlots.add(TimeRange.fromStartEnd(previousEventEnd, event.start(), false));
+      }
+      if (event.end() > previousEventEnd) {
+        previousEventEnd = event.end();
+      }
+    }
+    int gapDuration = TimeRange.END_OF_DAY - previousEventEnd;
+    if (gapDuration >= meetingDuration) {
+      freeSlots.add(TimeRange.fromStartEnd(previousEventEnd, TimeRange.END_OF_DAY, true));
+    }
   }
 }
