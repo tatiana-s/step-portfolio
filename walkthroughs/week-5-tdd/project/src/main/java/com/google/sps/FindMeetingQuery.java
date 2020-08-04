@@ -16,55 +16,41 @@ package com.google.sps;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.PriorityQueue;
 
 public final class FindMeetingQuery {
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     Collection<String> attendees = request.getAttendees();
-    int initialQueueCapacity = 1;
-    if (events.size() > 0) {
-      initialQueueCapacity = events.size();
-    }
-    PriorityQueue<TimeRange> blockingIntervals =
-        new PriorityQueue<>(initialQueueCapacity, TimeRange.ORDER_BY_START);
+    PriorityQueue<TimeRange> blockingEvents = new PriorityQueue<>(TimeRange.ORDER_BY_START);
     for (Event event : events) {
-      if (eventContainsAttendee(event, attendees)) {
-        blockingIntervals.add(event.getWhen());
+      if (!Collections.disjoint(event.getAttendees(), attendees)) {
+        blockingEvents.add(event.getWhen());
       }
     }
-    ArrayList<TimeRange> freeSlots = new ArrayList<>();
-    long duration = request.getDuration();
-    if (duration < TimeRange.WHOLE_DAY.duration()) {
-      if (!blockingIntervals.isEmpty()) {
-        int previousEnd = TimeRange.START_OF_DAY;
-        while (!blockingIntervals.isEmpty()) {
-          TimeRange timeRange = blockingIntervals.remove();
-          int intervalDifference = previousEnd - timeRange.start();
-          if (intervalDifference < 0 && Math.abs(intervalDifference) >= duration) {
-            freeSlots.add(TimeRange.fromStartEnd(previousEnd, timeRange.start(), false));
+    Collection<TimeRange> freeSlots = new ArrayList<>();
+    long meetingDuration = request.getDuration();
+    if (meetingDuration <= TimeRange.WHOLE_DAY.duration()) {
+      if (!blockingEvents.isEmpty()) {
+        int previousEventEnd = TimeRange.START_OF_DAY;
+        while (!blockingEvents.isEmpty()) {
+          TimeRange event = blockingEvents.remove();
+          int gapDuration = event.start() - previousEventEnd;
+          if (gapDuration >= meetingDuration) {
+            freeSlots.add(TimeRange.fromStartEnd(previousEventEnd, event.start(), false));
           }
-          if (timeRange.end() > previousEnd) {
-            previousEnd = timeRange.end();
+          if (event.end() > previousEventEnd) {
+            previousEventEnd = event.end();
           }
         }
-        int intervalDifference = previousEnd - TimeRange.END_OF_DAY;
-        if (intervalDifference < 0 && Math.abs(intervalDifference) >= duration) {
-          freeSlots.add(TimeRange.fromStartEnd(previousEnd, TimeRange.END_OF_DAY, true));
+        int gapDuration = TimeRange.END_OF_DAY - previousEventEnd;
+        if (gapDuration >= meetingDuration) {
+          freeSlots.add(TimeRange.fromStartEnd(previousEventEnd, TimeRange.END_OF_DAY, true));
         }
       } else {
         freeSlots.add(TimeRange.WHOLE_DAY);
       }
     }
     return freeSlots;
-  }
-
-  private static boolean eventContainsAttendee(Event event, Collection<String> requestAttendees) {
-    Collection<String> eventAttendees = event.getAttendees();
-    for (String attendee : requestAttendees) {
-      if (eventAttendees.contains(attendee)) {
-        return true;
-      }
-    }
-    return false;
   }
 }
