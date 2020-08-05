@@ -24,7 +24,8 @@ public final class FindMeetingQuery {
     Collection<String> attendees = request.getAttendees();
     Collection<String> optionalAttendees = request.getOptionalAttendees();
     PriorityQueue<TimeRange> blockingEvents = new PriorityQueue<>(TimeRange.ORDER_BY_START);
-    PriorityQueue<TimeRange> blockingEventsNonOptional = new PriorityQueue<>(TimeRange.ORDER_BY_START);
+    PriorityQueue<TimeRange> blockingEventsNonOptional =
+        new PriorityQueue<>(TimeRange.ORDER_BY_START);
     for (Event event : events) {
       if (!Collections.disjoint(event.getAttendees(), attendees)) {
         blockingEvents.add(event.getWhen());
@@ -39,7 +40,7 @@ public final class FindMeetingQuery {
     if (meetingDuration <= TimeRange.WHOLE_DAY.duration()) {
       if (!blockingEvents.isEmpty()) {
         findFreeSlots(blockingEvents, meetingDuration, freeSlots);
-        if(freeSlots.isEmpty()) {
+        if (freeSlots.isEmpty()) {
           if (!blockingEventsNonOptional.isEmpty()) {
             findFreeSlots(blockingEventsNonOptional, meetingDuration, freeSlots);
           } else {
@@ -53,7 +54,10 @@ public final class FindMeetingQuery {
     return freeSlots;
   }
 
-  private static void findFreeSlots(PriorityQueue<TimeRange> blockingEvents, long meetingDuration, Collection<TimeRange> freeSlots) {
+  private static void findFreeSlots(
+      PriorityQueue<TimeRange> blockingEvents,
+      long meetingDuration,
+      Collection<TimeRange> freeSlots) {
     int previousEventEnd = TimeRange.START_OF_DAY;
     while (!blockingEvents.isEmpty()) {
       TimeRange event = blockingEvents.remove();
