@@ -28,11 +28,12 @@ public final class FindMeetingQuery {
         new PriorityQueue<>(TimeRange.ORDER_BY_START);
     for (Event event : events) {
       if (!Collections.disjoint(event.getAttendees(), attendees)) {
-        blockingEvents.add(event.getWhen());
         blockingEventsNonOptional.add(event.getWhen());
-      }
-      if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
         blockingEvents.add(event.getWhen());
+      } else {
+        if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
+          blockingEvents.add(event.getWhen());
+        }
       }
     }
     Collection<TimeRange> freeSlots = new ArrayList<>();

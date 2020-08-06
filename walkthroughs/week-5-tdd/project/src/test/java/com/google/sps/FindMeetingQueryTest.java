@@ -315,7 +315,7 @@ public final class FindMeetingQueryTest {
   }
 
   @Test
-  public void optionalAttendeeAlwaysBlocked() {
+  public void optionalAttendeeAlwaysBlockedThereforeIgnored() {
     // Have each mandatory person have different events,
     // and the optional person have an all-day events.
     // We should see the three normal options because the optional person is ignored.
@@ -374,7 +374,6 @@ public final class FindMeetingQueryTest {
                 "Event 3",
                 TimeRange.fromStartDuration(TIME_0830AM, DURATION_30_MINUTES),
                 Arrays.asList(PERSON_C)));
-
     MeetingRequest request =
         new MeetingRequest(Arrays.asList(PERSON_A, PERSON_B), DURATION_30_MINUTES);
     request.addOptionalAttendee(PERSON_C);
@@ -413,6 +412,7 @@ public final class FindMeetingQueryTest {
                 Arrays.asList(PERSON_B)));
 
     MeetingRequest request = new MeetingRequest(Arrays.asList(PERSON_A), DURATION_30_MINUTES);
+    request.addOptionalAttendee(PERSON_B);
 
     Collection<TimeRange> actual = query.query(events, request);
     Collection<TimeRange> expected =
