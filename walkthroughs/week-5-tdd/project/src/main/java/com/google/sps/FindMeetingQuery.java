@@ -31,7 +31,7 @@ public final class FindMeetingQuery {
         blockingEventsNonOptional.add(event.getWhen());
         blockingEvents.add(event.getWhen());
       } else if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
-          blockingEvents.add(event.getWhen());
+        blockingEvents.add(event.getWhen());
       }
     }
     Collection<TimeRange> freeSlots = new ArrayList<>();
@@ -48,7 +48,7 @@ public final class FindMeetingQuery {
             findFreeSlots(blockingEventsNonOptional, meetingDuration, freeSlots);
           }
         }
-      } 
+      }
     }
     return freeSlots;
   }
