@@ -30,27 +30,25 @@ public final class FindMeetingQuery {
       if (!Collections.disjoint(event.getAttendees(), attendees)) {
         blockingEventsNonOptional.add(event.getWhen());
         blockingEvents.add(event.getWhen());
-      } else {
-        if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
+      } else if (!Collections.disjoint(event.getAttendees(), optionalAttendees)) {
           blockingEvents.add(event.getWhen());
-        }
       }
     }
     Collection<TimeRange> freeSlots = new ArrayList<>();
     long meetingDuration = request.getDuration();
     if (meetingDuration <= TimeRange.WHOLE_DAY.duration()) {
-      if (!blockingEvents.isEmpty()) {
+      if (blockingEvents.isEmpty()) {
+        freeSlots.add(TimeRange.WHOLE_DAY);
+      } else {
         findFreeSlots(blockingEvents, meetingDuration, freeSlots);
         if (freeSlots.isEmpty()) {
-          if (!blockingEventsNonOptional.isEmpty()) {
-            findFreeSlots(blockingEventsNonOptional, meetingDuration, freeSlots);
-          } else {
+          if (blockingEventsNonOptional.isEmpty()) {
             freeSlots.add(TimeRange.WHOLE_DAY);
+          } else {
+            findFreeSlots(blockingEventsNonOptional, meetingDuration, freeSlots);
           }
         }
-      } else {
-        freeSlots.add(TimeRange.WHOLE_DAY);
-      }
+      } 
     }
     return freeSlots;
   }
